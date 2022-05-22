@@ -1,0 +1,5 @@
+What is your name?,input
+In what year was the first artificial earth satellite launched?, regular, 1, 1957,1961,1977
+What types of apes are anthropoids?, multiselect, 1;2, Pongo pygmaeus,Pongo abelii, Cebus capucinus
+In what year was Voyadger-1 launched?, regular, 1, 1957,1961,1977
+In what year was first manned spacecraft launched?, regular, 1, 1957,1961,1977
