@@ -9,7 +9,7 @@
     <artifactId>root</artifactId>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>2022-05-bogomolov-01-homework-spring-context</artifactId>
+  <artifactId>01-homework-spring-context</artifactId>
   <!-- Semantic version-->
   <version>1.0.0</version>
   <properties>
