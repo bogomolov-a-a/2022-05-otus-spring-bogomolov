@@ -1,0 +1,18 @@
+This test contains 5 questions. For test passing you must answer correct on 4 questions.Question with MULTISELECT must have above 60 percent correct answer for question will be correct answered.
+You have only 2 attempts. Your current attempt number 1.
+Answer must be only number or comma separated number string(For example: '2' or '2,3' or '2, 3')
+Dear student, please type your full name.
+You can't passed test attempt number 1, because 'Wrong student name!'
+This test contains 5 questions. For test passing you must answer correct on 4 questions.Question with MULTISELECT must have above 60 percent correct answer for question will be correct answered.
+You have only 2 attempts. Your current attempt number 2.
+Answer must be only number or comma separated number string(For example: '2' or '2,3' or '2, 3')
+Dear student, please type your full name.
+Question number 1 (REGULAR): In what year was the first artificial earth satellite launched?
+
+Possible answers:
+
+1. 1957
+2. 1961
+3. 1977
+You can't passed test attempt number 2, because 'For input string: "2;"'
+You can't passed test for 2 attempts.

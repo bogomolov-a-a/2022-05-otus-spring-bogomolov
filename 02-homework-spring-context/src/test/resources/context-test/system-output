@@ -1,0 +1,44 @@
+This test contains 5 questions. For test passing you must answer correct on 4 questions.Question with MULTISELECT must have above 60 percent correct answer for question will be correct answered.
+You have only 2 attempts. Your current attempt number 1.
+Answer must be only number or comma separated number string(For example: '2' or '2,3' or '2, 3')
+Dear student, please type your full name.
+Question number 1 (REGULAR): In what year was the first artificial earth satellite launched?
+
+Possible answers:
+
+1. 1957
+2. 1961
+3. 1977
+You answer for this question is correct!
+Question number 2 (MULTISELECT): What types of apes are anthropoids?
+
+Possible answers:
+
+1. Pongo pygmaeus
+2. Pongo abelii
+3. Cebus capucinus
+You answer for this question is correct!
+Question number 3 (REGULAR): In what year was Voyadger-1 launched?
+
+Possible answers:
+
+1. 1957
+2. 1961
+3. 1977
+You answer for this question is correct!
+Question number 4 (REGULAR): In what year was first manned spacecraft launched?
+
+Possible answers:
+
+1. 1957
+2. 1961
+3. 1977
+You answer for this question is correct!
+Question number 5 (REGULAR): What subfamily of cats does the manul belong to?
+
+Possible answers:
+
+1. small cats
+2. big cats
+You answer for this question is correct!
+Congratulations! You passed this test! You success attempt number 1 of 2.

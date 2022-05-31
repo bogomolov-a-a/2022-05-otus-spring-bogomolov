@@ -8,5 +8,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>01-homework-spring-context</module>
+    <module>02-homework-spring-context</module>
   </modules>
 </project>
