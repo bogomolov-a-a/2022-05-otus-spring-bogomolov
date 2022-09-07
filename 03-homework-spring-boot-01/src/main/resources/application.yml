@@ -1,0 +1,10 @@
+app:
+  locale:
+    language: ru
+  test-suite:
+    correct-answer-number: 4
+    attempt-number: 2
+  question-list:
+    location: "questions/%s.csv"
+  question-answer:
+    multi-select-answer-level-in-percent: 0.6
