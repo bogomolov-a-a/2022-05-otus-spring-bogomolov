@@ -1,0 +1,6 @@
+app:
+  question-list:
+    location: "integration-test/questions/%s.csv"
+  it:
+    system-input-stub-resource-name: "integration-test/success-one-attempt/system-input"
+    system-output-stub-resource-name: "integration-test/success-one-attempt/system-output"

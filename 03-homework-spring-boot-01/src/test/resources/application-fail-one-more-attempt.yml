@@ -1,0 +1,8 @@
+app:
+  question-list:
+    location: "integration-test/questions/%s.csv"
+  test-suite:
+    correct-answer-number: 4
+    attempt-number: 2
+  it:
+    system-input-stub-resource-name: "integration-test/fail-one-more-attempt/system-input"
