@@ -1,0 +1,13 @@
+app:
+  locale:
+    language: ru
+  question-list:
+    location: ""
+  question-answer:
+    multi-select-answer-level-in-percent: 0.6
+spring:
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true

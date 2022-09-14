@@ -1,0 +1,11 @@
+app:
+  test-suite:
+    correct-answer-number: 4
+    attempt-number: 2
+  question-answer:
+    multi-select-answer-level-in-percent: 0.6
+  question-list:
+    location: "integration-test/questions/%s.csv"
+  it:
+    system-input-stub-resource-name: "integration-test/success-one-attempt/system-input"
+    system-output-stub-resource-name: "integration-test/success-one-attempt/system-output"
