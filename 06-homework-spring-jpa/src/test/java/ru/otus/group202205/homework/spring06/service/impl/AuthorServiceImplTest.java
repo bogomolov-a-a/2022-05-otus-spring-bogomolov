@@ -372,7 +372,7 @@ class AuthorServiceImplTest {
             .stream(method.getAnnotations())
             .map(Annotation::annotationType)
             .collect(Collectors.toList())
-            .contains(Transactional.class)).isTrue());
+            .contains(Transactional.class)).isFalse());
   }
 
 }
