@@ -1,10 +1,13 @@
 package ru.otus.group202205.homework.spring07.shell;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +18,11 @@ import ru.otus.group202205.homework.spring07.dto.AuthorDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
 import ru.otus.group202205.homework.spring07.model.Author;
 import ru.otus.group202205.homework.spring07.service.AuthorService;
-import ru.otus.group202205.homework.spring07.service.converter.impl.AuthorConverterImpl;
+import ru.otus.group202205.homework.spring07.service.converter.AuthorConverter;
 import ru.otus.group202205.homework.spring07.service.mapper.AuthorMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.AuthorMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 
-@SpringBootTest(classes = {AuthorShellComponent.class, AuthorConverterImpl.class, AuthorTestDataComponent.class, TestShellConfig.class, AuthorMapperImpl.class})
+@SpringBootTest(classes = {AuthorShellComponent.class, AuthorTestDataComponent.class, TestShellConfig.class})
 class AuthorShellComponentTest {
 
   private static final Long INSERTED_AUTHOR_ID_VALUE = 3L;
@@ -28,17 +30,82 @@ class AuthorShellComponentTest {
   private static final Long MISSING_AUTHOR_ID_VALUE = 4L;
   @Autowired
   private Shell shell;
-  @MockBean
-  private AuthorService authorService;
   @Autowired
   private AuthorTestDataComponent authorTestDataComponent;
-  @Autowired
+  @MockBean
+  private AuthorService authorService;
+  @MockBean
   private AuthorMapper authorMapper;
+  @MockBean
+  private AuthorConverter authorConverter;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(authorMapper);
+    Mockito.reset(authorConverter);
+    Mockito
+        .doAnswer(invocation -> {
+          Author author = invocation.getArgument(0);
+          AuthorDto result = new AuthorDto();
+          result.setId(author.getId());
+          result.setName(author.getName());
+          result.setSurname(author.getSurname());
+          result.setPatronymic(author.getPatronymic());
+          result.setBirthYear(author.getBirthYear());
+          result.setDeathYear(author.getDeathYear());
+          return result;
+        })
+        .when(authorMapper)
+        .toDto(any());
+    Mockito
+        .doAnswer(invocation -> {
+          AuthorDto authorDto = invocation.getArgument(0);
+          Author result = new Author();
+          result.setId(authorDto.getId());
+          result.setName(authorDto.getName());
+          result.setSurname(authorDto.getSurname());
+          result.setPatronymic(authorDto.getPatronymic());
+          result.setBirthYear(authorDto.getBirthYear());
+          result.setDeathYear(authorDto.getDeathYear());
+          return result;
+        })
+        .when(authorMapper)
+        .toEntity(any());
+    Mockito
+        .doAnswer(invocation -> {
+          AuthorDto author = invocation.getArgument(0);
+          return String.format("Author id: %d%ssurname: %s%sname: %s%spatronymic: %s%sbirth year: %d%sdeath year: %s%s",
+              author.getId(),
+              System.lineSeparator(),
+              author.getSurname(),
+              System.lineSeparator(),
+              author.getName(),
+              System.lineSeparator(),
+              author.getPatronymic(),
+              System.lineSeparator(),
+              author.getBirthYear(),
+              System.lineSeparator(),
+              author.getDeathYear(),
+              System.lineSeparator());
+        })
+        .when(authorConverter)
+        .convertAuthor(any());
+    Mockito
+        .doAnswer(invocation -> {
+          List<AuthorDto> authors = invocation.getArgument(0);
+          StringBuilder result = new StringBuilder("Author list").append(System.lineSeparator());
+          authors.forEach(author -> result.append(authorConverter.convertAuthor(author)));
+          return result.toString();
+        })
+        .when(authorConverter)
+        .convertAuthors(anyList());
+  }
 
   //region create
   @Test
   void shouldBeInsertNewAuthor() {
     Author exceptedAuthor = authorTestDataComponent.getMakiseKurisuAuthor();
+    AuthorDto exceptedAuthorDto = authorMapper.toDto(exceptedAuthor);
     Mockito
         .doAnswer(invocation -> {
           AuthorDto result = invocation.getArgument(0);
@@ -46,7 +113,7 @@ class AuthorShellComponentTest {
           return result;
         })
         .when(authorService)
-        .saveOrUpdate(authorMapper.toDto(exceptedAuthor));
+        .saveOrUpdate(exceptedAuthorDto);
     String successCreatedAuthorMessage = (String) shell.evaluate(() -> String.format("create-author --surname %s --name %s --birth-year %d",
         exceptedAuthor.getSurname(),
         exceptedAuthor.getName(),
@@ -63,11 +130,12 @@ class AuthorShellComponentTest {
         .isNotNull()
         .isEqualTo(EXISTING_AUTHOR_ID_VALUE);
     exceptedAuthor.setId(null);
+    AuthorDto exceptedAuthorDto = authorMapper.toDto(exceptedAuthor);
     Mockito
         .doThrow(new LibraryGeneralException("Can't insert or update author",
             new PersistenceException("unique key violation!")))
         .when(authorService)
-        .saveOrUpdate(authorMapper.toDto(exceptedAuthor));
+        .saveOrUpdate(exceptedAuthorDto);
     String naturalKeyViolationMessage = (String) shell.evaluate(() -> String.format("create-author --surname %s --name %s --birth-year %d --death-year %d",
         exceptedAuthor.getSurname(),
         exceptedAuthor.getName(),
@@ -150,6 +218,7 @@ class AuthorShellComponentTest {
     exceptedAuthor.setPatronymic("Vsevolodovich");
     exceptedAuthor.setName("Igor");
     exceptedAuthor.setSurname("Mojeiko");
+    AuthorDto exceptedAuthorDto = authorMapper.toDto(exceptedAuthor);
     Mockito
         .doAnswer(invocation -> {
           AuthorDto result = invocation.getArgument(0);
@@ -157,9 +226,9 @@ class AuthorShellComponentTest {
           return result;
         })
         .when(authorService)
-        .saveOrUpdate(authorMapper.toDto(exceptedAuthor));
-    String actualUpdateErrorMessage = (String) shell.evaluate(() -> "update-author --id " + EXISTING_AUTHOR_ID_VALUE +
-        " --surname Mojeiko --name Igor --patronymic Vsevolodovich");
+        .saveOrUpdate(exceptedAuthorDto);
+    String actualUpdateErrorMessage =
+        (String) shell.evaluate(() -> "update-author --id " + EXISTING_AUTHOR_ID_VALUE + " --surname Mojeiko --name Igor --patronymic Vsevolodovich");
     assertThat(actualUpdateErrorMessage)
         .isNotNull()
         .isEqualTo("Author with id " + EXISTING_AUTHOR_ID_VALUE + " updated!");
@@ -170,11 +239,12 @@ class AuthorShellComponentTest {
     Author emptyAuthor = new Author();
     emptyAuthor.setId(MISSING_AUTHOR_ID_VALUE);
     emptyAuthor.setPatronymic(null);
+    AuthorDto exceptedAuthorDto = authorMapper.toDto(emptyAuthor);
     Mockito
         .doThrow(new LibraryGeneralException("Can't update author",
             new PersistenceException("Not found author with id " + MISSING_AUTHOR_ID_VALUE)))
         .when(authorService)
-        .saveOrUpdate(authorMapper.toDto(emptyAuthor));
+        .saveOrUpdate(exceptedAuthorDto);
     String actualUpdateErrorMessage = (String) shell.evaluate(() -> "update-author --id " + MISSING_AUTHOR_ID_VALUE);
     assertThat(actualUpdateErrorMessage)
         .isNotNull()

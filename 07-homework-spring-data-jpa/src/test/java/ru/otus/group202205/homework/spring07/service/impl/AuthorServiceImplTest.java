@@ -2,6 +2,7 @@ package ru.otus.group202205.homework.spring07.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,9 @@ import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
 import ru.otus.group202205.homework.spring07.model.Author;
 import ru.otus.group202205.homework.spring07.service.AuthorService;
 import ru.otus.group202205.homework.spring07.service.mapper.AuthorMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.AuthorMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 
-@SpringBootTest(classes = {AuthorServiceImpl.class, AuthorTestDataComponent.class, AuthorMapperImpl.class})
+@SpringBootTest(classes = {AuthorServiceImpl.class, AuthorTestDataComponent.class})
 class AuthorServiceImplTest {
 
   private static final Long INSERTED_AUTHOR_ID_VALUE = 3L;
@@ -40,15 +41,45 @@ class AuthorServiceImplTest {
   private static final String MAKISE_KURISU_NICK_NAME = "KurigohanAndKamehameha";
   @Autowired
   private AuthorService authorService;
-
-  @MockBean
-  private AuthorRepository authorRepositoryJpa;
-
   @Autowired
   private AuthorTestDataComponent authorTestDataComponent;
-
-  @Autowired
+  @MockBean
+  private AuthorRepository authorRepositoryJpa;
+  @MockBean
   private AuthorMapper authorMapper;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(authorMapper);
+    Mockito
+        .doAnswer(invocation -> {
+          Author author = invocation.getArgument(0);
+          AuthorDto result = new AuthorDto();
+          result.setId(author.getId());
+          result.setName(author.getName());
+          result.setSurname(author.getSurname());
+          result.setPatronymic(author.getPatronymic());
+          result.setBirthYear(author.getBirthYear());
+          result.setDeathYear(author.getDeathYear());
+          return result;
+        })
+        .when(authorMapper)
+        .toDto(any());
+    Mockito
+        .doAnswer(invocation -> {
+          AuthorDto authorDto = invocation.getArgument(0);
+          Author result = new Author();
+          result.setId(authorDto.getId());
+          result.setName(authorDto.getName());
+          result.setSurname(authorDto.getSurname());
+          result.setPatronymic(authorDto.getPatronymic());
+          result.setBirthYear(authorDto.getBirthYear());
+          result.setDeathYear(authorDto.getDeathYear());
+          return result;
+        })
+        .when(authorMapper)
+        .toEntity(any());
+  }
 
   //region create
   @Test
@@ -372,7 +403,7 @@ class AuthorServiceImplTest {
             .stream(method.getAnnotations())
             .map(Annotation::annotationType)
             .collect(Collectors.toList())
-            .contains(Transactional.class)).isTrue());
+            .contains(Transactional.class)).isFalse());
   }
 
 }

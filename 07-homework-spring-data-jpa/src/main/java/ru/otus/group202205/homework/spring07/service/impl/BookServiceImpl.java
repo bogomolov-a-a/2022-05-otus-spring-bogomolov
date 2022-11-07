@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.group202205.homework.spring07.dao.BookRepository;
 import ru.otus.group202205.homework.spring07.dto.BookFullDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
@@ -18,7 +17,6 @@ public class BookServiceImpl implements BookService {
   private final BookRepository bookRepository;
   private final BookMapper bookMapper;
 
-  @Transactional(readOnly = true)
   @Override
   public List<BookFullDto> findAll() {
     try {
@@ -33,7 +31,6 @@ public class BookServiceImpl implements BookService {
     }
   }
 
-  @Transactional(readOnly = true)
   @Override
   public BookFullDto findById(Long id) {
     try {
@@ -46,7 +43,7 @@ public class BookServiceImpl implements BookService {
     }
   }
 
-  @Transactional
+
   @Override
   public BookFullDto saveOrUpdate(BookFullDto book) {
     try {
@@ -57,7 +54,6 @@ public class BookServiceImpl implements BookService {
     }
   }
 
-  @Transactional
   @Override
   public void deleteById(Long id) {
     try {

@@ -15,10 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.group202205.homework.spring07.dao.AuthorRepository;
 import ru.otus.group202205.homework.spring07.dao.BookRepository;
 import ru.otus.group202205.homework.spring07.dao.DaoConfig;
-import ru.otus.group202205.homework.spring07.dao.GenreRepository;
 import ru.otus.group202205.homework.spring07.model.Author;
 import ru.otus.group202205.homework.spring07.model.Book;
 import ru.otus.group202205.homework.spring07.model.Genre;
@@ -38,10 +36,6 @@ class BookRepositoryJpaTest {
   private static final String GIRL_FROM_EARTH_RUSSIAN_NAME = "Девочка с Земли";
   @Autowired
   private BookRepository bookRepository;
-  @Autowired
-  private GenreRepository genreRepository;
-  @Autowired
-  private AuthorRepository authorRepository;
   @Autowired
   private TestEntityManager testEntityManager;
   @Autowired

@@ -21,7 +21,6 @@ public class BookCommentServiceImpl implements BookCommentService {
   private final BookRepository bookRepository;
   private final BookCommentMapper bookCommentMapper;
 
-  @Transactional(readOnly = true)
   @Override
   public List<BookCommentDto> findAll() {
     try {
@@ -36,7 +35,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
   }
 
-  @Transactional(readOnly = true)
   @Override
   public BookCommentDto findById(Long id) {
     try {
@@ -67,7 +65,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
   }
 
-  @Transactional
   @Override
   public BookCommentDto saveOrUpdate(BookCommentDto bookComment) {
     try {
@@ -78,7 +75,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
   }
 
-  @Transactional
   @Override
   public void deleteById(Long id) {
     try {

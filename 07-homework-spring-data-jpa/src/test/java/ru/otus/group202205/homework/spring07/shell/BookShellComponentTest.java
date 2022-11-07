@@ -1,33 +1,37 @@
 package ru.otus.group202205.homework.spring07.shell;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.Shell;
+import ru.otus.group202205.homework.spring07.dto.AuthorDto;
 import ru.otus.group202205.homework.spring07.dto.BookFullDto;
+import ru.otus.group202205.homework.spring07.dto.GenreDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
 import ru.otus.group202205.homework.spring07.model.Author;
 import ru.otus.group202205.homework.spring07.model.Book;
 import ru.otus.group202205.homework.spring07.model.Genre;
 import ru.otus.group202205.homework.spring07.service.BookService;
-import ru.otus.group202205.homework.spring07.service.converter.impl.AuthorConverterImpl;
-import ru.otus.group202205.homework.spring07.service.converter.impl.BookConverterImpl;
-import ru.otus.group202205.homework.spring07.service.converter.impl.GenreConverterImpl;
+import ru.otus.group202205.homework.spring07.service.converter.AuthorConverter;
+import ru.otus.group202205.homework.spring07.service.converter.BookConverter;
+import ru.otus.group202205.homework.spring07.service.converter.GenreConverter;
 import ru.otus.group202205.homework.spring07.service.mapper.BookMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.BookMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.GenreTestDataComponent;
 
-@SpringBootTest(classes = {BookShellComponent.class, BookConverterImpl.class, AuthorConverterImpl.class, GenreConverterImpl.class, BookTestDataComponent.class,
-    AuthorTestDataComponent.class, GenreTestDataComponent.class, TestShellConfig.class, BookMapperImpl.class})
+@SpringBootTest(
+    classes = {BookShellComponent.class, BookTestDataComponent.class, AuthorTestDataComponent.class, GenreTestDataComponent.class, TestShellConfig.class})
 class BookShellComponentTest {
 
   private static final Long INSERTED_BOOK_ID_VALUE = 3L;
@@ -46,8 +50,139 @@ class BookShellComponentTest {
   private GenreTestDataComponent genreTestDataComponent;
   @MockBean
   private BookService bookService;
-  @Autowired
+  @MockBean
   private BookMapper bookMapper;
+  @MockBean
+  private BookConverter bookConverter;
+  @MockBean
+  private AuthorConverter authorConverter;
+  @MockBean
+  private GenreConverter genreConverter;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(bookMapper);
+    Mockito.reset(authorConverter);
+    Mockito.reset(genreConverter);
+    Mockito.reset(bookConverter);
+    Mockito
+        .doAnswer(invocation -> {
+          BookFullDto bookDto = invocation.getArgument(0);
+          Book book = new Book();
+          book.setId(bookDto.getId());
+          book.setTitle(bookDto.getTitle());
+          book.setIsbn(bookDto.getIsbn());
+          AuthorDto authorDto = bookDto.getAuthor();
+          if (authorDto != null) {
+            Author author = new Author();
+            author.setId(authorDto.getId());
+            author.setSurname(authorDto.getSurname());
+            author.setName(authorDto.getName());
+            author.setPatronymic(authorDto.getPatronymic());
+            author.setBirthYear(authorDto.getBirthYear());
+            author.setDeathYear(authorDto.getDeathYear());
+            book.setAuthor(author);
+          }
+          GenreDto genreDto = bookDto.getGenre();
+          if (genreDto != null) {
+            Genre genre = new Genre();
+            genre.setId(genreDto.getId());
+            genre.setName(genreDto.getName());
+            book.setGenre(genre);
+          }
+          return book;
+        })
+        .when(bookMapper)
+        .toEntityFromFull(any());
+    Mockito
+        .doAnswer(invocation -> {
+          Book book = invocation.getArgument(0);
+          BookFullDto bookDto = new BookFullDto();
+          bookDto.setId(book.getId());
+          bookDto.setTitle(book.getTitle());
+          bookDto.setIsbn(book.getIsbn());
+          Author author = book.getAuthor();
+          if (author != null) {
+            AuthorDto authorDto = new AuthorDto();
+            authorDto.setId(author.getId());
+            authorDto.setSurname(author.getSurname());
+            authorDto.setName(author.getName());
+            authorDto.setPatronymic(author.getPatronymic());
+            authorDto.setBirthYear(author.getBirthYear());
+            authorDto.setDeathYear(author.getDeathYear());
+            bookDto.setAuthor(authorDto);
+          }
+          Genre genre = book.getGenre();
+          if (genre != null) {
+            GenreDto genreDto = new GenreDto();
+            genreDto.setId(genre.getId());
+            genreDto.setName(genre.getName());
+            bookDto.setGenre(genreDto);
+          }
+          return bookDto;
+        })
+        .when(bookMapper)
+        .toFullDto(any());
+    Mockito
+        .doAnswer(invocation -> {
+          AuthorDto author = invocation.getArgument(0);
+          return String.format("Author id: %d%ssurname: %s%sname: %s%spatronymic: %s%sbirth year: %d%sdeath year: %s%s",
+              author.getId(),
+              System.lineSeparator(),
+              author.getSurname(),
+              System.lineSeparator(),
+              author.getName(),
+              System.lineSeparator(),
+              author.getPatronymic(),
+              System.lineSeparator(),
+              author.getBirthYear(),
+              System.lineSeparator(),
+              author.getDeathYear(),
+              System.lineSeparator());
+        })
+        .when(authorConverter)
+        .convertAuthor(any());
+    Mockito
+        .doAnswer(invocation -> {
+          GenreDto genre = invocation.getArgument(0);
+          return String.format("Genre id: %d%sname: %s%s",
+              genre.getId(),
+              System.lineSeparator(),
+              genre.getName(),
+              System.lineSeparator());
+        })
+        .when(genreConverter)
+        .convertGenre(any());
+    Mockito
+        .doAnswer(invocation -> {
+          BookFullDto book = invocation.getArgument(0);
+          return String.format("Book id: %d%stitle: %s%sisbn: %s%swritten by: %s in genre: %s%s",
+              book.getId(),
+              System.lineSeparator(),
+              book.getTitle(),
+              System.lineSeparator(),
+              book.getIsbn(),
+              System.lineSeparator(),
+              authorConverter
+                  .convertAuthor(book.getAuthor())
+                  .trim(),
+              genreConverter
+                  .convertGenre(book.getGenre())
+                  .trim(),
+              System.lineSeparator());
+        })
+        .when(bookConverter)
+        .convertBook(any());
+    Mockito
+        .doAnswer(invocation -> {
+          List<BookFullDto> books = invocation.getArgument(0);
+          StringBuilder result = new StringBuilder("Book list").append(System.lineSeparator());
+          books.forEach(book -> result.append(bookConverter.convertBook(book)));
+          return result.toString();
+        })
+        .when(bookConverter)
+        .convertBooks(anyList());
+  }
 
   //region create
   @Test
@@ -70,6 +205,7 @@ class BookShellComponentTest {
         .getGenre()
         .getId());
     exceptedBook.setGenre(exceptedGenre);
+    BookFullDto exceptedBookDto = bookMapper.toFullDto(exceptedBook);
     Mockito
         .doAnswer(invocation -> {
           BookFullDto insertableBook = invocation.getArgument(0);
@@ -77,7 +213,7 @@ class BookShellComponentTest {
           return insertableBook;
         })
         .when(bookService)
-        .saveOrUpdate(bookMapper.toFullDto(exceptedBook));
+        .saveOrUpdate(exceptedBookDto);
     String successCreatedBookMessage = (String) shell.evaluate(() -> String.format("create-book --title %s --isbn %s --author-id %d --genre-id %d",
         exceptedBook.getTitle(),
         exceptedBook.getIsbn(),
@@ -116,11 +252,12 @@ class BookShellComponentTest {
         .getGenre()
         .getId());
     exceptedBook.setGenre(exceptedGenre);
+    BookFullDto exceptedBookDto = bookMapper.toFullDto(exceptedBook);
     Mockito
         .doThrow(new LibraryGeneralException("Can't create book",
             new PersistenceException("author or genre not found")))
         .when(bookService)
-        .saveOrUpdate(bookMapper.toFullDto(exceptedBook));
+        .saveOrUpdate(exceptedBookDto);
     String errorCreatedBookMessage = (String) shell.evaluate(() -> String.format("create-book --title %s --isbn %s --author-id %d --genre-id %d",
         exceptedBook.getTitle(),
         exceptedBook.getIsbn(),
@@ -231,13 +368,14 @@ class BookShellComponentTest {
     Book actualUpdatedBook = new Book();
     actualUpdatedBook.setId(EXISTING_BOOK_ID_VALUE);
     actualUpdatedBook.setTitle(GIRL_FROM_EARTH_RUSSIAN_NAME);
+    BookFullDto actualUpdatedBookDto = bookMapper.toFullDto(actualUpdatedBook);
     Mockito
         .doAnswer(invocation -> {
           existingBook.setTitle(((BookFullDto) invocation.getArgument(0)).getTitle());
           return existingBook;
         })
         .when(bookService)
-        .saveOrUpdate(bookMapper.toFullDto(actualUpdatedBook));
+        .saveOrUpdate(actualUpdatedBookDto);
     String successUpdateBookMessage = (String) shell.evaluate(() -> String.format("update-book --id %d --title %s",
         EXISTING_BOOK_ID_VALUE,
         GIRL_FROM_EARTH_RUSSIAN_NAME));
@@ -252,11 +390,12 @@ class BookShellComponentTest {
     emptyNotExistingBook.setId(MISSING_BOOK_ID_VALUE);
     emptyNotExistingBook.setAuthor(new Author());
     emptyNotExistingBook.setGenre(new Genre());
+    BookFullDto emptyNotExistingBookDto = bookMapper.toFullDto(emptyNotExistingBook);
     Mockito
         .doThrow(new LibraryGeneralException("Can't update book",
             new PersistenceException("Book not found with id " + MISSING_BOOK_ID_VALUE)))
         .when(bookService)
-        .saveOrUpdate(bookMapper.toFullDto(emptyNotExistingBook));
+        .saveOrUpdate(emptyNotExistingBookDto);
     String errorUpdateBookMessage = (String) shell.evaluate(() -> String.format("update-book --id %d",
         MISSING_BOOK_ID_VALUE));
     assertThat(errorUpdateBookMessage)

@@ -12,7 +12,7 @@ public class BookCommentDto {
 
   private Long id;
   private String text;
-  private LocalDateTime created;
+  private LocalDateTime created = LocalDateTime.now();
   private BookSimpleDto book;
 
 }

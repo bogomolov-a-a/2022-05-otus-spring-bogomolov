@@ -2,10 +2,10 @@ package ru.otus.group202205.homework.spring07.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.members.RawMember;
 import com.fasterxml.classmate.members.RawMethod;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +26,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.group202205.homework.spring07.dao.BookCommentRepository;
 import ru.otus.group202205.homework.spring07.dao.BookRepository;
 import ru.otus.group202205.homework.spring07.dto.BookCommentDto;
+import ru.otus.group202205.homework.spring07.dto.BookSimpleDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
 import ru.otus.group202205.homework.spring07.model.Book;
 import ru.otus.group202205.homework.spring07.model.BookComment;
 import ru.otus.group202205.homework.spring07.service.BookCommentService;
 import ru.otus.group202205.homework.spring07.service.mapper.BookCommentMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.BookCommentMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookCommentTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.GenreTestDataComponent;
 
-@SpringBootTest(classes = {BookCommentServiceImpl.class, BookCommentMapperImpl.class, BookCommentTestDataComponent.class, BookTestDataComponent.class,
+@SpringBootTest(classes = {BookCommentServiceImpl.class, BookCommentTestDataComponent.class, BookTestDataComponent.class,
     AuthorTestDataComponent.class, GenreTestDataComponent.class})
 class BookCommentServiceImplTest {
 
@@ -48,8 +49,6 @@ class BookCommentServiceImplTest {
   @Autowired
   private BookCommentService bookCommentService;
   @Autowired
-  private BookCommentMapper bookCommentMapper;
-  @Autowired
   private BookCommentTestDataComponent bookCommentTestDataComponent;
   @Autowired
   private BookTestDataComponent bookTestDataComponent;
@@ -57,6 +56,47 @@ class BookCommentServiceImplTest {
   private BookCommentRepository bookCommentRepositoryJpa;
   @MockBean
   private BookRepository bookRepository;
+  @MockBean
+  private BookCommentMapper bookCommentMapper;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(bookCommentMapper);
+    Mockito
+        .doAnswer(invocation -> {
+          BookComment bookComment = invocation.getArgument(0);
+          BookCommentDto result = new BookCommentDto();
+          result.setId(bookComment.getId());
+          result.setText(bookComment.getText());
+          result.setCreated(bookComment.getCreated());
+          Book book = bookComment.getBook();
+          if (book != null) {
+            BookSimpleDto bookDto = new BookSimpleDto();
+            bookDto.setId(book.getId());
+            result.setBook(bookDto);
+          }
+          return result;
+        })
+        .when(bookCommentMapper)
+        .toDto(any());
+    Mockito
+        .doAnswer(invocation -> {
+          BookCommentDto bookCommentDto = invocation.getArgument(0);
+          BookComment result = new BookComment();
+          result.setId(bookCommentDto.getId());
+          result.setText(bookCommentDto.getText());
+          result.setCreated(bookCommentDto.getCreated());
+          BookSimpleDto bookDto = bookCommentDto.getBook();
+          if (bookDto != null) {
+            Book book = new Book();
+            book.setId(bookDto.getId());
+            result.setBook(book);
+          }
+          return result;
+        })
+        .when(bookCommentMapper)
+        .toEntity(any());
+  }
 
   //region create
   @Test
@@ -282,12 +322,14 @@ class BookCommentServiceImplTest {
     List<RawMethod> methods = resolvedType.getMemberMethods();
     methods
         .stream()
-        .filter(RawMember::isPublic)
+        .filter(rawMethod -> rawMethod.isPublic() && !rawMethod
+            .getName()
+            .equals("findAllByBookId"))
         .forEach(method -> assertThat(Arrays
             .stream(method.getAnnotations())
             .map(Annotation::annotationType)
             .collect(Collectors.toList())
-            .contains(Transactional.class)).isTrue());
+            .contains(Transactional.class)).isFalse());
   }
 
 }

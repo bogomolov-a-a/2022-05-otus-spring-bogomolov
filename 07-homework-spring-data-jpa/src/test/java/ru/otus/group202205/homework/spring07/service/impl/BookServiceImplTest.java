@@ -2,6 +2,7 @@ package ru.otus.group202205.homework.spring07.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +23,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.group202205.homework.spring07.dao.BookRepository;
+import ru.otus.group202205.homework.spring07.dto.AuthorDto;
 import ru.otus.group202205.homework.spring07.dto.BookFullDto;
+import ru.otus.group202205.homework.spring07.dto.GenreDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
+import ru.otus.group202205.homework.spring07.model.Author;
 import ru.otus.group202205.homework.spring07.model.Book;
+import ru.otus.group202205.homework.spring07.model.Genre;
 import ru.otus.group202205.homework.spring07.service.BookService;
 import ru.otus.group202205.homework.spring07.service.mapper.BookMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.BookMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.GenreTestDataComponent;
 
 @SpringBootTest(classes = {BookServiceImpl.class, BookTestDataComponent.class, AuthorTestDataComponent.class,
-    GenreTestDataComponent.class, BookMapperImpl.class})
+    GenreTestDataComponent.class})
 class BookServiceImplTest {
 
   private static final Long INSERTED_BOOK_ID_VALUE = 3L;
@@ -47,10 +52,73 @@ class BookServiceImplTest {
   private GenreTestDataComponent genreTestDataComponent;
   @Autowired
   private AuthorTestDataComponent authorTestDataComponent;
-  @Autowired
+  @MockBean
   private BookMapper bookMapper;
   @MockBean
   private BookRepository bookRepositoryJpa;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(bookMapper);
+    Mockito
+        .doAnswer(invocation -> {
+          BookFullDto bookDto = invocation.getArgument(0);
+          Book book = new Book();
+          book.setId(bookDto.getId());
+          book.setTitle(bookDto.getTitle());
+          book.setIsbn(bookDto.getIsbn());
+          AuthorDto authorDto = bookDto.getAuthor();
+          if (authorDto != null) {
+            Author author = new Author();
+            author.setId(authorDto.getId());
+            author.setSurname(authorDto.getSurname());
+            author.setName(authorDto.getName());
+            author.setPatronymic(authorDto.getPatronymic());
+            author.setBirthYear(authorDto.getBirthYear());
+            author.setDeathYear(authorDto.getDeathYear());
+            book.setAuthor(author);
+          }
+          GenreDto genreDto = bookDto.getGenre();
+          if (genreDto != null) {
+            Genre genre = new Genre();
+            genre.setId(genreDto.getId());
+            genre.setName(genreDto.getName());
+            book.setGenre(genre);
+          }
+          return book;
+        })
+        .when(bookMapper)
+        .toEntityFromFull(any());
+    Mockito
+        .doAnswer(invocation -> {
+          Book book = invocation.getArgument(0);
+          BookFullDto bookDto = new BookFullDto();
+          bookDto.setId(book.getId());
+          bookDto.setTitle(book.getTitle());
+          bookDto.setIsbn(book.getIsbn());
+          Author author = book.getAuthor();
+          if (author != null) {
+            AuthorDto authorDto = new AuthorDto();
+            authorDto.setId(author.getId());
+            authorDto.setSurname(author.getSurname());
+            authorDto.setName(author.getName());
+            authorDto.setPatronymic(author.getPatronymic());
+            authorDto.setBirthYear(author.getBirthYear());
+            authorDto.setDeathYear(author.getDeathYear());
+            bookDto.setAuthor(authorDto);
+          }
+          Genre genre = book.getGenre();
+          if (genre != null) {
+            GenreDto genreDto = new GenreDto();
+            genreDto.setId(genre.getId());
+            genreDto.setName(genre.getName());
+            bookDto.setGenre(genreDto);
+          }
+          return bookDto;
+        })
+        .when(bookMapper)
+        .toFullDto(any());
+  }
 
   //region create
   @Test
@@ -89,11 +157,12 @@ class BookServiceImplTest {
   @Test
   void shouldBeThrowPersistenceExceptionForWithoutAuthorAndGenre() {
     Book expectedBook = bookTestDataComponent.getBookWithoutAuthorAndGenre();
+    BookFullDto exceptedBookDto = bookMapper.toFullDto(expectedBook);
     Mockito
         .doThrow(PersistenceException.class)
         .when(bookRepositoryJpa)
         .save(expectedBook);
-    assertThatCode(() -> bookService.saveOrUpdate(bookMapper.toFullDto(expectedBook)))
+    assertThatCode(() -> bookService.saveOrUpdate(exceptedBookDto))
         .isNotNull()
         .isInstanceOf(LibraryGeneralException.class)
         .hasCauseInstanceOf(PersistenceException.class);
@@ -102,11 +171,12 @@ class BookServiceImplTest {
   @Test
   void shouldBeThrowPersistenceExceptionForNotExistsAuthorAndGenre() {
     Book expectedBook = bookTestDataComponent.getBookWithMissingAuthorOrGenre();
+    BookFullDto exceptedBookDto = bookMapper.toFullDto(expectedBook);
     Mockito
         .doThrow(PersistenceException.class)
         .when(bookRepositoryJpa)
         .save(expectedBook);
-    assertThatCode(() -> bookService.saveOrUpdate(bookMapper.toFullDto(expectedBook)))
+    assertThatCode(() -> bookService.saveOrUpdate(exceptedBookDto))
         .isNotNull()
         .isInstanceOf(LibraryGeneralException.class)
         .hasCauseInstanceOf(PersistenceException.class);
@@ -204,11 +274,12 @@ class BookServiceImplTest {
   @Test
   void shouldBePersistenceExceptionInUpdateBook() {
     Book emptyBook = new Book();
+    BookFullDto emptyBookDto = bookMapper.toFullDto(emptyBook);
     Mockito
         .doThrow(PersistenceException.class)
         .when(bookRepositoryJpa)
         .save(emptyBook);
-    assertThatCode(() -> bookService.saveOrUpdate(bookMapper.toFullDto(emptyBook)))
+    assertThatCode(() -> bookService.saveOrUpdate(emptyBookDto))
         .isNotNull()
         .isInstanceOf(LibraryGeneralException.class)
         .hasCauseInstanceOf(PersistenceException.class);
@@ -269,7 +340,7 @@ class BookServiceImplTest {
             .stream(method.getAnnotations())
             .map(Annotation::annotationType)
             .collect(Collectors.toList())
-            .contains(Transactional.class)).isTrue());
+            .contains(Transactional.class)).isFalse());
   }
 
 }

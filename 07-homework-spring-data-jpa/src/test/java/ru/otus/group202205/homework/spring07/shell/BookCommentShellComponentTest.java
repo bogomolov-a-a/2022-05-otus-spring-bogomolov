@@ -1,11 +1,14 @@
 package ru.otus.group202205.homework.spring07.shell;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +16,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.Shell;
 import ru.otus.group202205.homework.spring07.dto.BookCommentDto;
+import ru.otus.group202205.homework.spring07.dto.BookSimpleDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
 import ru.otus.group202205.homework.spring07.model.Book;
 import ru.otus.group202205.homework.spring07.model.BookComment;
 import ru.otus.group202205.homework.spring07.service.BookCommentService;
-import ru.otus.group202205.homework.spring07.service.converter.impl.BookCommentConverterImpl;
+import ru.otus.group202205.homework.spring07.service.converter.BookCommentConverter;
 import ru.otus.group202205.homework.spring07.service.mapper.BookCommentMapper;
-import ru.otus.group202205.homework.spring07.service.mapper.impl.BookCommentMapperImpl;
 import ru.otus.group202205.homework.spring07.testdata.AuthorTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookCommentTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.BookTestDataComponent;
 import ru.otus.group202205.homework.spring07.testdata.GenreTestDataComponent;
 
-@SpringBootTest(classes = {BookCommentShellComponent.class, BookCommentConverterImpl.class, BookCommentTestDataComponent.class, BookTestDataComponent.class,
-    AuthorTestDataComponent.class, GenreTestDataComponent.class, TestShellConfig.class, BookCommentMapperImpl.class})
+@SpringBootTest(classes = {BookCommentShellComponent.class, BookCommentTestDataComponent.class, BookTestDataComponent.class, AuthorTestDataComponent.class,
+    GenreTestDataComponent.class, TestShellConfig.class})
 class BookCommentShellComponentTest {
 
   private static final Long INSERTED_BOOK_COMMENT_ID_VALUE = 4L;
@@ -41,8 +44,77 @@ class BookCommentShellComponentTest {
   private BookCommentTestDataComponent bookCommentTestDataComponent;
   @MockBean
   private BookCommentService bookCommentService;
-  @Autowired
+  @MockBean
   private BookCommentMapper bookCommentMapper;
+  @MockBean
+  private BookCommentConverter bookCommentConverter;
+
+  @BeforeEach
+  void init() {
+    Mockito.reset(bookCommentMapper);
+    Mockito.reset(bookCommentConverter);
+    Mockito
+        .doAnswer(invocation -> {
+          BookComment bookComment = invocation.getArgument(0);
+          BookCommentDto result = new BookCommentDto();
+          result.setId(bookComment.getId());
+          result.setText(bookComment.getText());
+          result.setCreated(bookComment.getCreated());
+          Book book = bookComment.getBook();
+          if (book != null) {
+            BookSimpleDto bookDto = new BookSimpleDto();
+            bookDto.setId(book.getId());
+            result.setBook(bookDto);
+          }
+          return result;
+        })
+        .when(bookCommentMapper)
+        .toDto(any());
+    Mockito
+        .doAnswer(invocation -> {
+          BookCommentDto bookCommentDto = invocation.getArgument(0);
+          BookComment result = new BookComment();
+          result.setId(bookCommentDto.getId());
+          result.setText(bookCommentDto.getText());
+          result.setCreated(bookCommentDto.getCreated());
+          BookSimpleDto bookDto = bookCommentDto.getBook();
+          if (bookDto != null) {
+            Book book = new Book();
+            book.setId(bookDto.getId());
+            result.setBook(book);
+          }
+          return result;
+        })
+        .when(bookCommentMapper)
+        .toEntity(any());
+    Mockito
+        .doAnswer(invocation -> {
+          BookCommentDto bookComment = invocation.getArgument(0);
+          return String.format("Comment id %d book with id %d at %s.%s with text: '%s'",
+              bookComment.getId(),
+              bookComment
+                  .getBook()
+                  .getId(),
+              bookComment
+                  .getCreated()
+                  .format(DateTimeFormatter.ISO_DATE_TIME),
+              System.lineSeparator(),
+              bookComment.getText());
+        })
+        .when(bookCommentConverter)
+        .convertBookComment(any());
+    Mockito
+        .doAnswer(invocation -> {
+          List<BookCommentDto> bookComments = invocation.getArgument(0);
+          StringBuilder result = new StringBuilder("Comment list:").append(System.lineSeparator());
+          bookComments.forEach(comment -> result
+              .append(bookCommentConverter.convertBookComment(comment))
+              .append(System.lineSeparator()));
+          return result.toString();
+        })
+        .when(bookCommentConverter)
+        .convertBookComments(anyList());
+  }
 
   //region create
   @Test
@@ -50,6 +122,7 @@ class BookCommentShellComponentTest {
     BookComment exceptedBookComment = bookCommentTestDataComponent.getAliceMielophonJokeCommentForGirlFromTheEarthBook();
     assertThat(exceptedBookComment.getId()).isNull();
     exceptedBookComment.setText("Nice_book!");
+    BookCommentDto exceptedBookCommentDto = bookCommentMapper.toDto(exceptedBookComment);
     Mockito
         .doAnswer(invocation -> {
           BookCommentDto insertableBookComment = invocation.getArgument(0);
@@ -57,7 +130,7 @@ class BookCommentShellComponentTest {
           return insertableBookComment;
         })
         .when(bookCommentService)
-        .saveOrUpdate(bookCommentMapper.toDto(exceptedBookComment));
+        .saveOrUpdate(exceptedBookCommentDto);
     String successCreatedBookCommentMessage = (String) shell.evaluate(() -> String.format("create-book-comment --text %s --created %s --book-id %d",
         exceptedBookComment.getText(),
         exceptedBookComment
@@ -78,11 +151,12 @@ class BookCommentShellComponentTest {
     Book missingBook = new Book();
     missingBook.setId(MISSING_BOOK_ID_VALUE);
     exceptedBookComment.setBook(missingBook);
+    BookCommentDto exceptedBookCommentDto = bookCommentMapper.toDto(exceptedBookComment);
     Mockito
         .doThrow(new LibraryGeneralException("Can't create book comment",
             new PersistenceException("Book not specified!")))
         .when(bookCommentService)
-        .saveOrUpdate(bookCommentMapper.toDto(exceptedBookComment));
+        .saveOrUpdate(exceptedBookCommentDto);
     String actualCreatedBookMessage = (String) shell.evaluate(() -> String.format("create-book-comment --book-id %d --created %s",
         exceptedBookComment
             .getBook()
@@ -197,13 +271,14 @@ class BookCommentShellComponentTest {
   @Test
   void shouldBeUpdateInsertedBookCommentText() {
     BookComment existingBookComment = bookCommentTestDataComponent.getNiceBookCommentForGirlFromTheEarthBook();
+    BookCommentDto existingBookCommentDto = bookCommentMapper.toDto(existingBookComment);
     Mockito
         .doAnswer(invocation -> {
           existingBookComment.setText(((BookCommentDto) invocation.getArgument(0)).getText());
           return existingBookComment;
         })
         .when(bookCommentService)
-        .saveOrUpdate(bookCommentMapper.toDto(existingBookComment));
+        .saveOrUpdate(existingBookCommentDto);
     String successUpdateBookMessage = (String) shell.evaluate(() -> String.format("update-book-comment --id %d --text %s --created %s",
         EXISTING_BOOK_ID_VALUE,
         RUSSIAN_COMMENT_TEXT,

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.group202205.homework.spring07.dao.AuthorRepository;
 import ru.otus.group202205.homework.spring07.dto.AuthorDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
@@ -19,7 +18,6 @@ public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorMapper authorMapper;
 
-  @Transactional(readOnly = true)
   @Override
   public List<AuthorDto> findAll() {
     try {
@@ -34,7 +32,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
   }
 
-  @Transactional(readOnly = true)
   @Override
   public AuthorDto findById(Long id) {
     try {
@@ -47,7 +44,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
   }
 
-  @Transactional
   @Override
   public AuthorDto saveOrUpdate(AuthorDto author) {
     try {
@@ -58,7 +54,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
   }
 
-  @Transactional
   @Override
   public void deleteById(Long id) {
     try {

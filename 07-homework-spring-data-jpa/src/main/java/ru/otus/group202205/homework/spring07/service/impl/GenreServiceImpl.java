@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.group202205.homework.spring07.dao.GenreRepository;
 import ru.otus.group202205.homework.spring07.dto.GenreDto;
 import ru.otus.group202205.homework.spring07.exception.LibraryGeneralException;
@@ -19,7 +18,6 @@ public class GenreServiceImpl implements GenreService {
 
   private final GenreMapper genreMapper;
 
-  @Transactional(readOnly = true)
   @Override
   public List<GenreDto> findAll() {
     try {
@@ -34,7 +32,7 @@ public class GenreServiceImpl implements GenreService {
     }
   }
 
-  @Transactional(readOnly = true)
+
   @Override
   public GenreDto findById(Long id) {
     try {
@@ -47,7 +45,6 @@ public class GenreServiceImpl implements GenreService {
     }
   }
 
-  @Transactional
   @Override
   public GenreDto saveOrUpdate(GenreDto genre) {
     try {
@@ -59,7 +56,6 @@ public class GenreServiceImpl implements GenreService {
   }
 
 
-  @Transactional
   @Override
   public void deleteById(Long id) {
     try {

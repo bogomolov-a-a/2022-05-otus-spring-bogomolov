@@ -29,7 +29,6 @@ class GenreRepositoryJpaTest {
   private static final String SCIENCE_FICTION_UPDATED_GENRE_NAME = "SciFi";
   @Autowired
   private GenreRepository genreRepository;
-
   @Autowired
   private TestEntityManager testEntityManager;
   @Autowired

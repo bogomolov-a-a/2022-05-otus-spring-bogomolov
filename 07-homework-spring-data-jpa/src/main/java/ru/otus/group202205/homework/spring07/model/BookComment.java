@@ -3,7 +3,6 @@ package ru.otus.group202205.homework.spring07.model;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +28,7 @@ public class BookComment {
   private String text;
   @Column(columnDefinition = "TIMESTAMP")
   private LocalDateTime created = LocalDateTime.now();
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(optional = false)
   @JoinColumn(name = "book_id")
   private Book book;
 

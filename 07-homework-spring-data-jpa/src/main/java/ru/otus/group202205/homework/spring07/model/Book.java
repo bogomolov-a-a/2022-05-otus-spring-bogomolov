@@ -28,10 +28,10 @@ public class Book {
   private Long id;
   private String title;
   private String isbn;
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(optional = false)
   @JoinColumn(name = "author_id", nullable = false)
   private Author author;
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(optional = false)
   @JoinColumn(name = "genre_id", nullable = false)
   private Genre genre;
   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "book")
