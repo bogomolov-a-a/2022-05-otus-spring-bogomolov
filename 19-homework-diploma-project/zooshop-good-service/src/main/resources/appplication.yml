@@ -1,0 +1,7 @@
+springdoc:
+  swagger-ui:
+    display-query-params: true
+    operations-sorter: ALPHA
+    display-operation-id: true
+  api-docs:
+    resolve-schema-properties: true
