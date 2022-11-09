@@ -1,0 +1,66 @@
+package ru.otus.group202205.homework.spring08.service.impl;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.otus.group202205.homework.spring08.dao.BookRepository;
+import ru.otus.group202205.homework.spring08.dto.BookFullDto;
+import ru.otus.group202205.homework.spring08.exception.LibraryGeneralException;
+import ru.otus.group202205.homework.spring08.service.BookService;
+import ru.otus.group202205.homework.spring08.service.mapper.BookMapper;
+
+@Service
+@RequiredArgsConstructor
+public class BookServiceImpl implements BookService {
+
+  private final BookRepository bookRepository;
+  private final BookMapper bookMapper;
+
+  @Override
+  public List<BookFullDto> findAll() {
+    try {
+      return bookRepository
+          .findAll()
+          .stream()
+          .map(bookMapper::toFullDto)
+          .collect(Collectors.toList());
+    } catch (RuntimeException e) {
+      throw new LibraryGeneralException("Can't get all books",
+          e);
+    }
+  }
+
+  @Override
+  public BookFullDto findById(String id) {
+    try {
+      return bookMapper.toFullDto(bookRepository
+          .findById(id)
+          .orElseThrow());
+    } catch (RuntimeException e) {
+      throw new LibraryGeneralException("Can't get book by id" + id,
+          e);
+    }
+  }
+
+  @Override
+  public BookFullDto saveOrUpdate(BookFullDto book) {
+    try {
+      return bookMapper.toFullDto(bookRepository.save(bookMapper.toEntityFromFull(book)));
+    } catch (RuntimeException e) {
+      throw new LibraryGeneralException("Can't insert or update book",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteById(String id) {
+    try {
+      bookRepository.deleteById(id);
+    } catch (RuntimeException e) {
+      throw new LibraryGeneralException("Can't delete book",
+          e);
+    }
+  }
+
+}
