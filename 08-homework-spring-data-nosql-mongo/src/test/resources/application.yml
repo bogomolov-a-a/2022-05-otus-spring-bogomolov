@@ -1,0 +1,19 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  mongodb:
+    embedded:
+      version: 5.0.5
+      storage:
+        oplogSize: 10
+        repl-set-name: rs0
+  data:
+    mongodb:
+      port: 27017
+      database: homework08-test
+      auto-index-creation: true
+logging:
+  level:
+    org: ERROR
+    com: ERROR

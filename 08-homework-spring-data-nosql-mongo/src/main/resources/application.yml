@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+      database: homework08
+      replica-set-name: rs0
+      port: 27017
