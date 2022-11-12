@@ -1,0 +1,15 @@
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="artem.bogomolov" context="production or tests" id="2022-09-17-create-db-schema">
+    <sqlFile path="db/changelogs/2022-09-17-create-db-schema.sql"/>
+  </changeSet>
+  <changeSet author="artem.bogomolov" context="production or tests" id="2022-10-12-add-comment-book-table">
+    <sqlFile path="db/changelogs/2022-10-12-add-comment-book-table.sql"/>
+  </changeSet>
+  <changeSet author="artem.bogomolov" context="production or tests" id="2022-11-10-import-data">
+    <sqlFile path="db/changelogs/2022-11-10-import-data.sql"/>
+  </changeSet>
+</databaseChangeLog>

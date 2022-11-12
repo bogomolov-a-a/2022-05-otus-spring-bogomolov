@@ -1,0 +1,24 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  mongodb:
+    embedded:
+      version: 5.0.5
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: NEVER
+  data:
+    mongodb:
+      port: 27017
+      database: homework08-test
+      auto-index-creation: true
+  liquibase:
+    change-log: db/db-change-log-master.xml
+    contexts: tests
+logging:
+  level:
+    org: ERROR
+    com: ERROR
