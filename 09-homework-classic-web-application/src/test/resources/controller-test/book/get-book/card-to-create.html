@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new book</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book:</p>
+    <form action="/books" method="post">
+
+      <div>
+        <label for="title_edit">Title: </label>
+        <input id="title_edit" name="title"
+               placeholder="Input title"
+               required="required" value=""/>
+      </div>
+      <div>
+        <label for="isbn_edit">ISBN: </label>
+        <input id="isbn_edit" name="isbn"
+               placeholder="Input isbn"
+               required="required"
+               value=""/>
+      </div>
+      <div>
+        <label for="author_select">Written: </label>
+        <select id="author_select" name="author.id">
+          <option disabled>Choice author</option>
+          <option value="1">Bulychev Kir not set</option>
+          <option value="2">Tolstoy Lev Nikolayevich</option>
+        </select>
+      </div>
+      <div>
+        <label for="genre_select">Genre: </label>
+        <select id="genre_select" name="genre.id">
+          <option disabled>Choice genre</option>
+          <option value="1">Novell</option>
+          <option value="2">Science fiction</option>
+        </select>
+      </div>
+      <div>
+        <input type="submit" value="Create"/>
+        <a href="/books">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>

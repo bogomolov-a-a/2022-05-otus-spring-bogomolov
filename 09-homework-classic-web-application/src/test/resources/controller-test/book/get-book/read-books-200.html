@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List of books in library</title>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new book with button
+    <form action="/book">
+      <input hidden="hidden" name="actionMode" value="CREATE"/>
+      <input type="submit" value="Create book card"/>
+    </form>
+    or return to <a href="/">Return to index</a>
+    </p>
+  </div>
+
+
+  <div><p>Following books found in our library:</p>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>Written</th>
+        <th>Genre</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr>
+        <td>1</td>
+        <td>Girl from the Earth</td>
+        <td>978-5-699-11438-2</td>
+        <td>Bulychev Kir not set</td>
+        <td>Science fiction</td>
+        <td>
+          <form action="/book">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open book card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify book card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/books/delete" method="post">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete book Card"/>
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Childhood. Boyhood. Youth</td>
+        <td>978-5-04-116640-3</td>
+        <td>Tolstoy Lev Nikolayevich</td>
+        <td>Novell</td>
+        <td>
+          <form action="/book">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open book card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify book card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/books/delete" method="post">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete book Card"/>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

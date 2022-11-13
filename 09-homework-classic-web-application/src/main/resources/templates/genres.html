@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List of authors in library</title>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new author with button
+    <form action="/genre" th:action="@{/genre}">
+      <input hidden="hidden" name="actionMode" th:value="CREATE"/>
+      <input type="submit" value="Create genre card"/>
+    </form>
+    or return to <a href="/" th:href="@{/}">Return to index</a>
+    </p>
+  </div>
+  <span th:if="${message!=null}" th:text="${message}">successful message</span>
+  <span th:if="${error!=null}" th:text="${error}">error message</span>
+  <div><p>Following authors found in our library:</p>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${#lists.isEmpty(genres)}">
+        <td colspan="5">No Records found!</td>
+      </tr>
+      <tr th:each="genre: ${genres}">
+        <td th:text="${genre.id}"/>
+        <td th:text="${genre.name}"/>
+        <td>
+          <form action="/genres" th:action="@{/genre}">
+            <input hidden="hidden" name="id" th:value="${genre.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="READ"/>
+            <input type="submit" value="Open genre card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/genre" th:action="@{/genre}">
+            <input hidden="hidden" name="id" th:value="${genre.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="UPDATE"/>
+            <input type="submit" value="Modify genre card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/genres" th:action="@{/genres/delete}" th:method="post">
+            <input hidden="hidden" name="id" th:value="${genre.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="DELETE"/>
+            <input type="submit" value="Delete genre Card"/>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

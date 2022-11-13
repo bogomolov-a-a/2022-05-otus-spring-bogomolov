@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List of book comments in library</title>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new book comment with button
+    <form action="/book-comment">
+      <input hidden="hidden" name="actionMode" value="CREATE"/>
+      <input type="submit" value="Create book card"/>
+    </form>
+    or return to <a href="/">Return to index</a>
+    </p>
+  </div>
+
+
+  <div><p>Following book comments found in our library:</p>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Text</th>
+        <th>Created</th>
+        <th>Book title</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr>
+        <td>3</td>
+        <td>Complicated book!</td>
+        <td>2022-10-26T22:35:32</td>
+        <td></td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="3"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="3"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comments/delete" method="post">
+            <input hidden="hidden" name="id" value="3"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete book comment Card"/>
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>I like this author!</td>
+        <td>2022-10-26T22:35:32</td>
+        <td></td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comments/delete" method="post">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete book comment Card"/>
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Nice book!</td>
+        <td>2022-10-26T22:35:31</td>
+        <td></td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comment">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify book comment card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/book-comments/delete" method="post">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete book comment Card"/>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

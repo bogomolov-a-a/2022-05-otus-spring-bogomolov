@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read bookcomment page</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book comment:</p>
+    <form action="/book-comments" method="post">
+      <div><label for="id_edit">Id: 1</label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="">
+      </div>
+      <div>
+        <label for="text_edit">Text: Nice book!</label>
+
+      </div>
+      <div>
+        <label for="created_edit">Created: 2022-10-26T22:35:31</label>
+
+      </div>
+      <div>
+        <label for="for_book_select">For book: Girl from the Earth</label>
+
+      </div>
+
+      <div>
+        <a href="/book-comments">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

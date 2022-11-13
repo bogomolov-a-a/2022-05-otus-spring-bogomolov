@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book comment:</p>
+    <form method="post" th:action="@{/book-comments}">
+      <div th:if="${updating or viewing}"><label for="id_edit" th:text="'Id: '+ (${bookComment!=null}?${bookComment.id}:'')">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               th:value="(${updating and bookComment!=null}?${bookComment.id}:'')"
+               value="1">
+      </div>
+      <div>
+        <label for="text_edit" th:text="'Text: '+ (${viewing and bookComment!=null}?${bookComment.text}:'')">Text: </label>
+        <input id="text_edit" name="text"
+               placeholder="Input text"
+               th:if="${editing}"
+               th:required="required"
+               th:value="(${updating and book!=null}?${bookComment.text}:'')"/>
+      </div>
+      <div>
+        <label for="created_edit" th:text="'Created: ' + (${viewing and bookComment!=null}?${bookComment.created}:'')">Created: </label>
+        <input id="created_edit" name="created"
+               placeholder="Input created"
+               required="required"
+               th:if="${editing}"
+               th:value="(${updating and bookComment!=null}?${bookComment.created}:'')"/>
+      </div>
+      <div>
+        <label for="for_book_select"
+               th:text="'For book: ' + (${viewing and bookComment!=null}?${bookComment.book.title}:'')">For book: </label>
+        <select id="for_book_select" name="book.id" th:if="${editing}">
+          <option disabled>Choice books</option>
+          <option th:each="book : ${books}" th:text="${book.title}" th:value="${book.id}">
+            book title
+          </option>
+        </select>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/book-comments" th:href="@{/book-comments}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/book-comments" th:href="@{/book-comments}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

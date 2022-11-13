@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List of authors in library</title>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new author with button
+    <form action="/author" th:action="@{/author}">
+      <input hidden="hidden" name="actionMode" th:value="CREATE"/>
+      <input type="submit" value="Create author card"/>
+    </form>
+    or return to <a href="/" th:href="@{/}">Return to index</a>
+    </p>
+  </div>
+  <span th:if="${message!=null}" th:text="${message}">successful message</span>
+  <span th:if="${error!=null}" th:text="${error}">error message</span>
+  <div><p>Following authors found in our library:</p>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Patronymic</th>
+        <th>Birth year</th>
+        <th>Dead year</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${#lists.isEmpty(authors)}">
+        <td colspan="9">No Records found!</td>
+      </tr>
+      <tr th:each="author: ${authors}">
+        <td th:text="${author.id}"/>
+        <td th:text="${author.surname}"/>
+        <td th:text="${author.name}"/>
+        <td th:text="${author.patronymic}"/>
+        <td th:text="${author.birthYear}"/>
+        <td th:text="${author.deathYear}"/>
+        <td>
+          <form action="/authors" th:action="@{/author}">
+            <input hidden="hidden" name="id" th:value="${author.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="READ"/>
+            <input type="submit" value="Open author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/author" th:action="@{/author}">
+            <input hidden="hidden" name="id" th:value="${author.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="UPDATE"/>
+            <input type="submit" value="Modify author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/authors" th:action="@{/authors/delete}" th:method="post">
+            <input hidden="hidden" name="id" th:value="${author.id}"/>
+            <input hidden="hidden" name="actionMode" th:value="DELETE"/>
+            <input type="submit" value="Delete author Card"/>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

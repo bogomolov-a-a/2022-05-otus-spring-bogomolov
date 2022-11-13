@@ -1,0 +1,7 @@
+spring:
+  liquibase:
+    change-log: db/db-change-log-master.xml
+    contexts: tests
+  shell:
+    interactive:
+      enabled: false

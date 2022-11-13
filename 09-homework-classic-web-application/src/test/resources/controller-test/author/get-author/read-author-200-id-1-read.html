@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read author page</title>
+</head>
+<body>
+<div>
+  <div><p>Information about author:</p>
+    <form action="/authors" method="post">
+      <div><label for="id_edit">Id: 1</label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="">
+      </div>
+      <div>
+        <label for="surname_edit">Surname: Bulychev</label>
+
+      </div>
+      <div>
+        <label for="name_edit">Name: Kir</label>
+
+      </div>
+      <div>
+        <label for="patronymic_edit">Patronymic: not set</label>
+
+      </div>
+      <div>
+        <label for="birth_year_edit">Birth year: 1934</label>
+
+      </div>
+      <div>
+        <label for="death_year_edit">Death year: 2003</label>
+
+      </div>
+
+      <div>
+        <a href="/authors">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

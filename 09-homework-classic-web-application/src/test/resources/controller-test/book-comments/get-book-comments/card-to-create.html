@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new bookcomment</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book comment:</p>
+    <form action="/book-comments" method="post">
+
+      <div>
+        <label for="text_edit">Text: </label>
+        <input id="text_edit" name="text"
+               placeholder="Input text"
+               required="required" value=""/>
+      </div>
+      <div>
+        <label for="created_edit">Created: </label>
+        <input id="created_edit" name="created"
+               placeholder="Input created"
+               required="required"
+               value=""/>
+      </div>
+      <div>
+        <label for="for_book_select">For book: </label>
+        <select id="for_book_select" name="book.id">
+          <option disabled>Choice books</option>
+
+        </select>
+      </div>
+      <div>
+        <input type="submit" value="Create"/>
+        <a href="/book-comments">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>
