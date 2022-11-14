@@ -1,10 +1,14 @@
 package ru.otus.group202205.homework.spring19.zooshop.good.model;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,15 +25,23 @@ public class Good {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @NonNull
+  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s)*")
+  @Max(1024)
   private String name;
+  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
+  @Max(8192)
   private String description;
   @NonNull
+  @Positive
   private Float price;
   @NonNull
+  @Positive
   private Float quantity;
   @NonNull
+  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
   private String producerName;
   @NonNull
-  private String categoryName;
+  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
+  private List<String> categoryName;
 
 }

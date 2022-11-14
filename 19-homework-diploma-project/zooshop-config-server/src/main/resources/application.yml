@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/bogomolov-a-a/spring-cloud-application-config-repo.git
+          default-label: master
+server:
+  forward-headers-strategy: FRAMEWORK
+  port: 8888

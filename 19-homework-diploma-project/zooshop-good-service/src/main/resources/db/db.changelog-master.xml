@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+  <changeSet author="artem.bogomolov" id="2022-11-14-create-good-table" runAlways="true">
+    <sqlFile path="/db/"
+  </changeSet>
+</databaseChangeLog>
