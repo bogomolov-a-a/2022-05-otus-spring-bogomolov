@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+</head>
+<body>
+<div>
+  <div><p>Information about genre:</p>
+    <form method="post" th:action="@{/genres}">
+      <div th:if="${updating or viewing}"><label for="id_edit" th:text="'Id: '+ (${genre!=null}?${genre.id}:'')">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               th:value="(${updating and genre!=null}?${genre.id}:'')"
+               value="1">
+      </div>
+      <div>
+        <label for="name_edit" th:text="'Name: ' + (${viewing and genre!=null}?${genre.name}:'')">Name: </label>
+        <input id="name_edit" name="name"
+               placeholder="Input name"
+               required="required"
+               th:if="${editing}"
+               th:value="(${updating and genre!=null}?${genre.name}:'')"/>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/genres" th:href="@{/genres}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/genres" th:href="@{/genres}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

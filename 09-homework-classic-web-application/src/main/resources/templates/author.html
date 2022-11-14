@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+</head>
+<body>
+<div>
+  <div><p>Information about author:</p>
+    <form method="post" th:action="@{/authors}">
+      <div th:if="${updating or viewing}"><label for="id_edit" th:text="'Id: '+ (${author!=null}?${author.id}:'')">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               th:value="(${updating and author!=null}?${author.id}:'')"
+               value="1">
+      </div>
+      <div>
+        <label for="surname_edit" th:text="'Surname: '+ (${viewing and author!=null}?${author.surname}:'')">Surname: </label>
+        <input id="surname_edit" name="surname"
+               placeholder="Input surname"
+               th:if="${editing}"
+               th:required="required"
+               th:value="(${updating and author!=null}?${author.surname}:'')"/>
+      </div>
+      <div>
+        <label for="name_edit" th:text="'Name: ' + (${viewing and author!=null}?${author.name}:'')">Name: </label>
+        <input id="name_edit" name="name"
+               placeholder="Input name"
+               required="required"
+               th:if="${editing}"
+               th:value="(${updating and author!=null}?${author.name}:'')"/>
+      </div>
+      <div>
+        <label for="patronymic_edit" th:text="'Patronymic: ' + (${viewing and author!=null}?${author.patronymic}:'')">Patronymic: </label>
+        <input id="patronymic_edit"
+               name="patronymic"
+               placeholder="Input patronymic"
+               th:if="${editing}"
+               th:value="(${updating and author!=null}?${author.patronymic}:'')"/>
+      </div>
+      <div>
+        <label for="birth_year_edit" th:text="'Birth year: ' + (${viewing and author!=null}?${author.birthYear}:'')">Birth year: </label>
+        <input id="birth_year_edit"
+               name="birthYear"
+               placeholder="Input birth year"
+               th:if="${editing}"
+               th:value="(${updating and author!=null}?${author.birthYear}:'')"/>
+      </div>
+      <div>
+        <label for="death_year_edit" th:text="'Death year: ' + (${viewing and author!=null}?${author.deathYear}:'')">Death year: </label>
+        <input id="death_year_edit"
+               name="deathYear"
+               placeholder="Input death year"
+               th:if="${editing}"
+               th:value="(${updating and author!=null}?${author.deathYear}:'')"/>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/authors" th:href="@{/authors}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/authors" th:href="@{/authors}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book:</p>
+    <form method="post" th:action="@{/books}">
+      <div th:if="${updating or viewing}"><label for="id_edit" th:text="'Id: '+ (${book!=null}?${book.id}:'')">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               th:value="(${updating and book!=null}?${book.id}:'')"
+               value="1">
+      </div>
+      <div>
+        <label for="title_edit" th:text="'Title: '+ (${viewing and book!=null}?${book.title}:'')">Title: </label>
+        <input id="title_edit" name="title"
+               placeholder="Input title"
+               th:if="${editing}"
+               th:required="required"
+               th:value="(${updating and book!=null}?${book.title}:'')"/>
+      </div>
+      <div>
+        <label for="isbn_edit" th:text="'ISBN: ' + (${viewing and book!=null}?${book.isbn}:'')">ISBN: </label>
+        <input id="isbn_edit" name="isbn"
+               placeholder="Input isbn"
+               required="required"
+               th:if="${editing}"
+               th:value="(${updating and book!=null}?${book.isbn}:'')"/>
+      </div>
+      <div>
+        <label for="author_select"
+               th:text="'Written: ' + (${viewing and book!=null}?${book.author.surname}+' '+${book.author.name}+' '+${book.author.patronymic}:'')">Written: </label>
+        <select id="author_select" name="author.id" th:if="${editing}">
+          <option disabled>Choice author</option>
+          <option th:each="author : ${authors}" th:text="${author.surname}+' '+${author.name}+' '+${author.patronymic}" th:value="${author.id}">
+            author full name
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="genre_select" th:text="'Genre: ' + (${viewing and book!=null}?${book.genre.name}:'')">Genre: </label>
+        <select id="genre_select" name="genre.id" th:if="${editing}">
+          <option disabled>Choice genre</option>
+          <option th:each="genre : ${genres}" th:text="${genre.name}" th:value="${genre.id}">
+            genre name
+          </option>
+        </select>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/books" th:href="@{/books}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/books" th:href="@{/books}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

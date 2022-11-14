@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List of authors in library</title>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new author with button
+    <form action="/author">
+      <input hidden="hidden" name="actionMode" value="CREATE"/>
+      <input type="submit" value="Create author card"/>
+    </form>
+    or return to <a href="/">Return to index</a>
+    </p>
+  </div>
+
+
+  <div><p>Following authors found in our library:</p>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Patronymic</th>
+        <th>Birth year</th>
+        <th>Dead year</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr>
+        <td>1</td>
+        <td>Bulychev</td>
+        <td>Kir</td>
+        <td>not set</td>
+        <td>1934</td>
+        <td>2003</td>
+        <td>
+          <form action="/author">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/author">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/authors/delete" method="post">
+            <input hidden="hidden" name="id" value="1"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete author Card"/>
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Tolstoy</td>
+        <td>Lev</td>
+        <td>Nikolayevich</td>
+        <td>1828</td>
+        <td>1910</td>
+        <td>
+          <form action="/author">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="READ"/>
+            <input type="submit" value="Open author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/author">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="UPDATE"/>
+            <input type="submit" value="Modify author card"/>
+          </form>
+        </td>
+        <td>
+          <form action="/authors/delete" method="post">
+            <input hidden="hidden" name="id" value="2"/>
+            <input hidden="hidden" name="actionMode" value="DELETE"/>
+            <input type="submit" value="Delete author Card"/>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

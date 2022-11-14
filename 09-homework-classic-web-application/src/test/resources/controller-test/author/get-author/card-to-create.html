@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new author</title>
+</head>
+<body>
+<div>
+  <div><p>Information about author:</p>
+    <form action="/authors" method="post">
+
+      <div>
+        <label for="surname_edit">Surname: </label>
+        <input id="surname_edit" name="surname"
+               placeholder="Input surname"
+               required="required" value=""/>
+      </div>
+      <div>
+        <label for="name_edit">Name: </label>
+        <input id="name_edit" name="name"
+               placeholder="Input name"
+               required="required"
+               value=""/>
+      </div>
+      <div>
+        <label for="patronymic_edit">Patronymic: </label>
+        <input id="patronymic_edit"
+               name="patronymic"
+               placeholder="Input patronymic"
+               value=""/>
+      </div>
+      <div>
+        <label for="birth_year_edit">Birth year: </label>
+        <input id="birth_year_edit"
+               name="birthYear"
+               placeholder="Input birth year"
+               value=""/>
+      </div>
+      <div>
+        <label for="death_year_edit">Death year: </label>
+        <input id="death_year_edit"
+               name="deathYear"
+               placeholder="Input death year"
+               value=""/>
+      </div>
+      <div>
+        <input type="submit" value="Create"/>
+        <a href="/authors">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read book page</title>
+</head>
+<body>
+<div>
+  <div><p>Information about book:</p>
+    <form action="/books" method="post">
+      <div><label for="id_edit">Id: 1</label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="">
+      </div>
+      <div>
+        <label for="title_edit">Title: Girl from the Earth</label>
+
+      </div>
+      <div>
+        <label for="isbn_edit">ISBN: 978-5-699-11438-2</label>
+
+      </div>
+      <div>
+        <label for="author_select">Written: Bulychev Kir not set</label>
+
+      </div>
+      <div>
+        <label for="genre_select">Genre: Science fiction</label>
+
+      </div>
+
+      <div>
+        <a href="/books">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new genre</title>
+</head>
+<body>
+<div>
+  <div><p>Information about genre:</p>
+    <form action="/genres" method="post">
+
+      <div>
+        <label for="name_edit">Name: </label>
+        <input id="name_edit" name="name"
+               placeholder="Input name"
+               required="required"
+               value=""/>
+      </div>
+      <div>
+        <input type="submit" value="Create"/>
+        <a href="/genres">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>
