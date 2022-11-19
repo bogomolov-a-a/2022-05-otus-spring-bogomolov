@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new author</title>
+  <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+      function fillElementForRead(suffix,author){
+        $("#id_edit"+suffix)[0].innerHTML='Id: '+author.id
+        $("#surname_edit"+suffix)[0].innerHTML='Surname: '+author.surname
+        $("#name_edit"+suffix)[0].innerHTML='Name: '+author.name
+        $("#patronymic_edit"+suffix)[0].innerHTML='Patronymic: '+author.patronymic
+        $("#birth_year_edit"+suffix)[0].innerHTML='Birth year: '+author.birthYear
+        $("#death_year_edit"+suffix)[0].innerHTML='Death year: '+author.deathYear
+      }
+      function fillElementForUpdate(author){
+        $("#id_edit")[0].value=author.id
+        $("#surname_edit")[0].value=author.surname
+        $("#name_edit")[0].value=author.name
+        $("#patronymic_edit")[0].value=author.patronymic
+        $("#birth_year_edit")[0].value=author.birthYear
+        $("#death_year_edit")[0].value=author.deathYear
+      }
+      function handleAuthor(actionMode,author){
+        actionMode==="READ"?fillElementForRead("_label",author):fillElementForUpdate(author)
+      }
+      $( document ).ready(function(){
+        let actionMode=$("#action_mode_span")[0].innerHTML
+        if(actionMode==='CREATE'||actionMode===null){
+          return;
+        }
+        $.ajax({
+          url: '/authors/'+$("#id_span")[0].innerHTML,
+          method: 'GET'
+        }).done(function(author){
+          handleAuthor(actionMode,author)
+        })
+      })
+
+
+  </script>
+</head>
+<body>
+<span hidden="hidden" id="id_span">0</span>
+<span hidden="hidden" id="action_mode_span">CREATE</span>
+<div>
+  <div><p>Information about author:</p>
+    <form action="/authors" method="post">
+
+      <div>
+        <label for="surname_edit" id="surname_edit_label">Surname: </label>
+        <input id="surname_edit" name="surname"
+               placeholder="Input surname" required="required"/>
+      </div>
+      <div>
+        <label for="name_edit" id="name_edit_label">Name: </label>
+        <input id="name_edit" name="name"
+               placeholder="Input name"
+               required="required"/>
+      </div>
+      <div>
+        <label for="patronymic_edit" id="patronymic_edit_label">Patronymic: </label>
+        <input id="patronymic_edit"
+               name="patronymic"
+               placeholder="Input patronymic"/>
+      </div>
+      <div>
+        <label for="birth_year_edit" id="birth_year_edit_label">Birth year: </label>
+        <input id="birth_year_edit"
+               name="birthYear"
+               placeholder="Input birth year"/>
+      </div>
+      <div>
+        <label for="death_year_edit" id="death_year_edit_label">Death year: </label>
+        <input id="death_year_edit"
+               name="deathYear"
+               placeholder="Input death year"/>
+      </div>
+      <div>
+        <input type="submit" value="Create"/>
+        <a href="/authors/page">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body>
+</html>

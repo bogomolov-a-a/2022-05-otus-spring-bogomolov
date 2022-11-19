@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List of books in library</title>
+  <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+    function deleteBook(bookId){
+        $.ajax(
+        {
+          url:"/books/"+bookId,
+          method:"DELETE"
+        })
+       }
+   function handleBook(book){
+       var text='<tr>'
+       text+='<td>'+book.id+'</td>'
+       text+='<td>'+book.title+'</td>'
+       text+='<td>'+book.isbn+'</td>'
+       text+='<td>'+book.author.surname+' '+book.author.name+' '+book.author.patronymic+'</td>'
+       text+='<td>'+book.genre.name+'</td>'
+       text+='<td><a href="/books/'+book.id+'/page/READ">View card</a></td>'
+       text+='<td><a href="/books/'+book.id+'/page/UPDATE">Modify card</a></td>'
+       text+='<td><a href="#" onclick="deleteBook('+book.id+'); return false">Delete card</a></td>'
+       text+='</tr>'
+       return text
+   }
+   function handleBookList(bookList)
+   {
+    var text =''
+    if(bookList.length==0)
+    {
+      text+='<tr>'
+      text+='<td colspan="8">No records found!</td>'
+      text+='</tr>'
+      return text
+    }
+    bookList.forEach(function (book){ text+=handleBook(book)})
+    return text
+  }
+  $( document ).ready(function(){
+      $.ajax({
+        url:'/books'
+      }).done(function(bookList){
+        $('#books-list > tbody ')[0].innerHTML=handleBookList(bookList)
+      })
+   })
+
+
+
+  </script>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new book with button
+    <form action="/book" th:action="@{/books/0/page/CREATE}">
+      <input type="submit" value="Create book card"/>
+    </form>
+    or return to <a href="/" th:href="@{/}">Return to index</a>
+    </p>
+  </div>
+  <div><p>Following books found in our library:</p>
+    <table border="1" id="book-list">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>Written</th>
+        <th>Genre</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody/>
+    </table>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+</head>
+<script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+<script>
+      function fillElementForRead(suffix,bookComment){
+        $("#id_edit"+suffix)[0].innerHTML='Id: '+bookComment.id
+        $("#text_edit"+suffix)[0].innerHTML='Title: '+bookComment.title
+        $("#created_edit"+suffix)[0].innerHTML='ISBN: '+bookComment.isbn
+        $("#for_book_select"+suffix)[0].innerHTML='For book: '+bookComment.book.title
+      }
+      function fillElementForUpdate(bookComment){
+        $("#id_edit")[0].value=bookComment.id
+        $("#text_edit")[0].value=bookComment.text
+        $("#created_edit")[0].value=bookComment.created
+        $("#for_book_select_label")[0].selectedIndex=bookComment.book.id
+      }
+      function handleBookComment(actionMode,bookComment){
+        actionMode==="READ"?fillElementForRead("_label",bookComment):fillElementForUpdate(bookComment)
+      }
+      $( document ).ready(function(){
+        let actionMode=$("#action_mode_span")[0].innerHTML
+        if(actionMode==='CREATE'||actionMode===null){
+          return;
+        }
+        $.ajax({
+          url: '/book-comments/'+$("#id_span")[0].innerHTML,
+          method: 'GET'
+        }).done(function(bookComment){
+          handleBookComment(actionMode,bookComment)
+        })
+      })
+
+
+
+
+</script>
+<body>
+<span hidden="hidden" id="id_span" th:text="${id}"/>
+<span hidden="hidden" id="action_mode_span" th:text="${actionMode}"/>
+<div>
+  <div><p>Information about book comment:</p>
+    <form method="post" th:action="@{/book-comments}">
+      <div th:if="${updating or viewing}"><label for="id_edit" id="id_edit_label">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="1">
+      </div>
+      <div>
+        <label for="text_edit" id="text_edit_label">Text: </label>
+        <input id="text_edit" name="text"
+               placeholder="Input text"
+               th:if="${editing}"
+               th:required="required"/>
+      </div>
+      <div>
+        <label for="created_edit" id="created_edit_label">Created: </label>
+        <input id="created_edit" name="created"
+               placeholder="Input created"
+               required="required"
+               th:if="${editing}"/>
+      </div>
+      <div>
+        <label for="for_book_select" id="for_book_select_label">For book: </label>
+        <select id="for_book_select" name="bookComment.id" th:if="${editing}">
+          <option disabled>Choice books</option>
+          <option th:each="book : ${books}" th:text="${bookComment.title}" th:value="${bookComment.id}">
+            book title
+          </option>
+        </select>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/book-comments" th:href="@{/book-comments}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/book-comments" th:href="@{/book-comments}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

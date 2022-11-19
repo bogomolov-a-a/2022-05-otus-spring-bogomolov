@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read book page</title>
+  <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+      function fillElementForRead(suffix,book){
+        $("#id_edit"+suffix)[0].innerHTML='Id: '+book.id
+        $("#title_edit"+suffix)[0].innerHTML='Title: '+book.title
+        $("#isbn_edit"+suffix)[0].innerHTML='ISBN: '+book.isbn
+        $("#author_select"+suffix)[0].innerHTML='Written: '+book.author.surname+' '+book.author.name+' '+book.author.patronymic
+        $("#genre_select"+suffix)[0].innerHTML='Genre: '+book.genre.name
+      }
+      function fillElementForUpdate(book){
+        $("#id_edit")[0].value=book.id
+        $("#title_edit")[0].value=book.title
+        $("#isbn_edit")[0].value=book.isbn
+        $("#author_select")[0].selectedIndex=book.author.id
+        $("#genre_select")[0].selectedIndex=book.genre.id
+      }
+      function handleBook(actionMode,book){
+        actionMode==="READ"?fillElementForRead("_label",book):fillElementForUpdate(book)
+      }
+      $( document ).ready(function(){
+        let actionMode=$("#action_mode_span")[0].innerHTML
+        if(actionMode==='CREATE'||actionMode===null){
+          return;
+        }
+        $.ajax({
+          url: '/books/'+$("#id_span")[0].innerHTML,
+          method: 'GET'
+        }).done(function(book){
+          handleBook(actionMode,book)
+        })
+      })
+
+
+
+
+  </script>
+</head>
+<body>
+<span hidden="hidden" id="id_span">1</span>
+<span hidden="hidden" id="action_mode_span">READ</span>
+<div>
+  <div><p>Information about book:</p>
+    <form action="/books" method="post">
+      <div><label for="id_edit" id="id_edit_label">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="1">
+      </div>
+      <div>
+        <label for="title_edit" id="title_edit_label">Title: </label>
+
+      </div>
+      <div>
+        <label for="isbn_edit" id="isbn_edit_label">ISBN: </label>
+
+      </div>
+      <div>
+        <label for="author_select" id="author_select_label">Written: </label>
+
+      </div>
+      <div>
+        <label for="genre_select" id="genre_select_label">Genre: </label>
+
+      </div>
+
+      <div>
+        <a href="/books/page">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
