@@ -1,0 +1,18 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Library web application</title>
+</head>
+<body>
+<h1>Library web application</h1>
+We have:
+<ul>
+  <li><a href="/authors" th:href="@{/authors/page}">List of authors</a></li>
+  <li><a href="/genres" th:href="@{/genres/page}">List of genres</a></li>
+  <li><a href="/books" th:href="@{/books/page}">List of books</a></li>
+  <li><a href="/books" th:href="@{/book-comments/page}">List of book comments</a></li>
+</ul>
+<a href="/logout">Logout</a>
+</body>
+</html>

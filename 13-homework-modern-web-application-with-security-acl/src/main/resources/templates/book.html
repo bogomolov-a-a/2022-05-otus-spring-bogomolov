@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pageTitle}">Page title</title>
+  <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+      function fillElementForRead(suffix,book){
+        $("#id_edit"+suffix)[0].innerHTML='Id: '+book.id
+        $("#title_edit"+suffix)[0].innerHTML='Title: '+book.title
+        $("#isbn_edit"+suffix)[0].innerHTML='ISBN: '+book.isbn
+        $("#author_select"+suffix)[0].innerHTML='Written: '+book.author.surname+' '+book.author.name+' '+book.author.patronymic
+        $("#genre_select"+suffix)[0].innerHTML='Genre: '+book.genre.name
+      }
+      function fillElementForUpdate(book){
+        $("#id_edit")[0].value=book.id
+        $("#title_edit")[0].value=book.title
+        $("#isbn_edit")[0].value=book.isbn
+        $("#author_select")[0].selectedIndex=book.author.id
+        $("#genre_select")[0].selectedIndex=book.genre.id
+      }
+      function handleBook(actionMode,book){
+        actionMode==="READ"?fillElementForRead("_label",book):fillElementForUpdate(book)
+      }
+      $( document ).ready(function(){
+        let actionMode=$("#action_mode_span")[0].innerHTML
+        if(actionMode==='CREATE'||actionMode===null){
+          return;
+        }
+        $.ajax({
+          url: '/books/'+$("#id_span")[0].innerHTML,
+          method: 'GET'
+        }).done(function(book){
+          handleBook(actionMode,book)
+        })
+      })
+
+
+
+
+
+
+
+
+  </script>
+</head>
+<body>
+<span hidden="hidden" id="id_span" th:text="${id}"/>
+<span hidden="hidden" id="action_mode_span" th:text="${actionMode}"/>
+<div>
+  <div><p>Information about book:</p>
+    <form method="post" th:action="@{/books}">
+      <div th:if="${updating or viewing}"><label for="id_edit" id="id_edit_label">Id: </label>
+        <input hidden="hidden" id="id_edit" name="id"
+               placeholder="Input id"
+               required="required"
+               value="1">
+      </div>
+      <div>
+        <label for="title_edit" id="title_edit_label">Title: </label>
+        <input id="title_edit" name="title"
+               placeholder="Input title"
+               th:if="${editing}"
+               th:required="required"
+        />
+      </div>
+      <div>
+        <label for="isbn_edit" id="isbn_edit_label">ISBN: </label>
+        <input id="isbn_edit" name="isbn"
+               placeholder="Input isbn"
+               required="required"
+               th:if="${editing}"/>
+      </div>
+      <div>
+        <label for="author_select" id="author_select_label">Written: </label>
+        <select id="author_select" name="author.id" th:if="${editing}">
+          <option disabled>Choice author</option>
+          <option th:each="author : ${authors}" th:text="${author.surname}+' '+${author.name}+' '+${author.patronymic}" th:value="${author.id}">
+            author full name
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="genre_select" id="genre_select_label">Genre: </label>
+        <select id="genre_select" name="genre.id" th:if="${editing}">
+          <option disabled>Choice genre</option>
+          <option th:each="genre : ${genres}" th:text="${genre.name}" th:value="${genre.id}">
+            genre name
+          </option>
+        </select>
+      </div>
+      <div th:if="${editing}">
+        <input th:value="${submitButtonCaption}" type="submit"/>
+        <a href="/books" th:href="@{/books/page}">Cancel</a>
+      </div>
+      <div th:if="${viewing}">
+        <a href="/books" th:href="@{/books/page}">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

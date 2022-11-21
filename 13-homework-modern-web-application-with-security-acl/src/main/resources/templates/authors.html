@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List of authors in library</title>
+</head>
+<script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    function deleteAuthor(authorId){
+        $.ajax(
+        {
+          url:"/authors/"+authorId,
+          method:"DELETE"
+        }).done(function(){window.location="/authors/page"})
+       }
+   function handleAuthor(author){
+       var text='<tr>'
+       text+='<td>'+author.id+'</td>'
+       text+='<td>'+author.surname+'</td>'
+       text+='<td>'+author.name+'</td>'
+       text+='<td>'+author.patronymic+'</td>'
+       text+='<td>'+author.birthYear+'</td>'
+       text+='<td>'+author.deathYear+'</td>'
+       text+='<td><a href="/authors/'+author.id+'/page/READ">View card</a></td>'
+       text+='<td><a href="/authors/'+author.id+'/page/UPDATE">Modify card</a></td>'
+       text+='<td><a href="#" onclick="deleteAuthor('+author.id+'); return false">Delete card</a></td>'
+       text+='</tr>'
+       return text
+   }
+   function handleAuthorList(authorList)
+   {
+    var text =''
+    if(authorList.length==0)
+    {
+      text+='<tr>'
+      text+='<td colspan="9">No records found!</td>'
+      text+='</tr>'
+      return text
+    }
+    authorList.forEach(function (author){ text+=handleAuthor(author)})
+    return text
+  }
+  $( document ).ready(function(){
+      $.ajax({
+        url:'/authors'
+      }).done(function(authorList){
+        $('#authors-list > tbody ')[0].innerHTML=handleAuthorList(authorList)
+      })
+   })
+
+
+
+
+
+
+
+</script>
+<body>
+<div>
+  <div>
+    <p>You can add new author with button
+    <form action="/author/page" th:action="@{/authors/0/page/CREATE}">
+      <input type="submit" value="Create author card"/>
+    </form>
+    or return to <a href="/" th:href="@{/}">Return to index</a>
+    </p>
+  </div>
+  <div><p>Following authors found in our library:</p>
+    <table border="1" id="authors-list">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Patronymic</th>
+        <th>Birth year</th>
+        <th>Dead year</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody/>
+    </table>
+  </div>
+</div>
+</body>
+</html>
