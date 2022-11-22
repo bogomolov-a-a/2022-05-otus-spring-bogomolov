@@ -1,12 +1,12 @@
 package ru.otus.group202205.homework.spring19.zooshop.good.model;
 
-import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
@@ -26,10 +26,8 @@ public class Good {
   private Long id;
   @NonNull
   @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s)*")
-  @Max(1024)
   private String name;
   @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  @Max(8192)
   private String description;
   @NonNull
   @Positive
@@ -37,11 +35,13 @@ public class Good {
   @NonNull
   @Positive
   private Float quantity;
+  @Enumerated(EnumType.STRING)
+  private GoodUnit goodUnit;
   @NonNull
   @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
   private String producerName;
   @NonNull
   @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  private List<String> categoryName;
+  private String categoryName;
 
 }

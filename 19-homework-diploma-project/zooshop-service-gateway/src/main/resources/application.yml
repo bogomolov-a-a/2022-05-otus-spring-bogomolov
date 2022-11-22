@@ -1,19 +1,16 @@
 spring:
   application:
-    name: zooshop-config-server
-  cloud:
-    config:
-      server:
-        git:
-          uri: ${CONFIG_REPO:https://github.com/bogomolov-a-a/spring-cloud-application-config-repo.git}
-          default-label: ${CONFIG_REPO_DEFAULT_LABEL:master}
-          search-paths: {application}
+    name: zooshop-service-gateway
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
 eureka:
   client:
     enabled: true
     register-with-eureka: true
     service-url:
       defaultZone: ${EUREKA_URI:http://localhost:8100/eureka}
+
 management:
   endpoints:
     web:
@@ -32,4 +29,10 @@ management:
       enabled: true
 server:
   forward-headers-strategy: FRAMEWORK
-  port: 8888
+  port: 8200
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  level:
+    ru.otus.group202205.homework.spring19: DEBUG

@@ -1,10 +1,39 @@
 spring:
+  application:
+    name: zooshop-service-discovery
   cloud:
     config:
-      server:
-        git:
-          uri: https://github.com/bogomolov-a-a/spring-cloud-application-config-repo.git
-          default-label: master
+      enabled: false
+
 server:
+  port: 8100
   forward-headers-strategy: FRAMEWORK
-  port: 8888
+eureka:
+  server:
+    enableSelfPreservation: true
+    wait-time-in-ms-when-sync-empty: 0
+    registry-sync-retries: 3
+    max-threads-for-peer-replication: 0
+  instance:
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 0
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    logfile:
+      enabled: true
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
+    env:
+      enabled: true
