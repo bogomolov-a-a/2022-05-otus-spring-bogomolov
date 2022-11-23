@@ -19,14 +19,16 @@ management:
       enabled: true
     health:
       enabled: true
+      show-details: ALWAYS
+      show-components: ALWAYS
     info:
       enabled: true
     env:
       enabled: true
+
 server:
   forward-headers-strategy: framework
   port: 8102
-
 springdoc:
   swagger-ui:
     operations-sorter: ALPHA

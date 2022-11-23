@@ -1,23 +1,25 @@
 package ru.otus.group202205.homework.spring19.zooshop.good.service;
 
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.otus.group202205.homework.spring19.zooshop.good.dto.GoodDto;
 
 public interface GoodService {
 
-  List<GoodDto> findAll(int pageNumber, int pageSize);
+  List<GoodDto> findAll(Pageable pageable, Sort sort);
 
   GoodDto findById(Long id);
 
-  List<GoodDto> findAllByName(String name, int pageNumber, int pageSize);
+  List<GoodDto> findAllByName(String name, Pageable pageable, Sort sort);
 
-  List<GoodDto> findAllByProducerName(String producerName, int pageNumber, int pageSize);
-
-
-  List<GoodDto> findAllByCategoryName(String categoryName, int pageNumber, int pageSize);
+  List<GoodDto> findAllByProducerId(Long producerId, Pageable pageable, Sort sort);
 
 
-  List<GoodDto> findAllByPriceBetween(Float bottomBorder, Float topBorder, int pageNumber, int pageSize);
+  List<GoodDto> findAllByCategoryId(Long categoryId, Pageable pageable, Sort sort);
+
+
+  List<GoodDto> findAllByPriceBetween(Float bottomBorder, Float topBorder,Pageable pageable, Sort sort);
 
   GoodDto save(GoodDto good);
 
@@ -25,8 +27,8 @@ public interface GoodService {
 
   void deleteAll();
 
-  void deleteAllByProducerName(String producerName);
+  void deleteAllByProducerId(Long producerId);
 
-  void deleteAllByCategoryName(String categoryName);
+  void deleteAllByCategoryId(Long categoryId);
 
 }

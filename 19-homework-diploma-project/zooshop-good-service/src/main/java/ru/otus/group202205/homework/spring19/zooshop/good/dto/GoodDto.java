@@ -35,10 +35,10 @@ public class GoodDto {
   @Enumerated(EnumType.STRING)
   private GoodUnit goodUnit;
   @NonNull
-  @Schema(title = "name of good producer", pattern = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  private String producerName;
+  @Schema(title = "id of good producer, part of natural key", pattern = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
+  private Long producerId;
   @NonNull
-  @Schema(title = "name of good category", pattern = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  private String categoryName;
+  @Schema(title = "id of good category", pattern = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
+  private Long categoryId;
 
 }

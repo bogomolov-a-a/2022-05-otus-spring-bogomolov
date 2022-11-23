@@ -5,7 +5,7 @@ CREATE TABLE GOODS(
 	price REAL not null,
 	quantity REAL not null,
 	good_unit varchar(100) not null,
-	producer_name varchar(1024) not null,
-	category_name varchar(1024) not null,
-	CONSTRAINT natural_key UNIQUE (name,producer_name,price)
+	producer_id bigint not null,
+	category_id bigint not null,
+	CONSTRAINT natural_key UNIQUE (name,producer_id,price)
 );

@@ -1,18 +1,22 @@
 package ru.otus.group202205.homework.spring19.zooshop.good.dao;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import ru.otus.group202205.homework.spring19.zooshop.good.model.Good;
 
 public interface GoodRepository extends PagingAndSortingRepository<Good, Long> {
 
-  List<Good> findAllByName(String name, Pageable pageable);
+  Page<Good> findAllByName(String name, Pageable pageable);
 
-  List<Good> findAllByProducerName(String producerName, Pageable pageable);
+  Page<Good> findAllByProducerId(Long producerId, Pageable pageable);
 
-  List<Good> findAllByCategoryName(String categoryName, Pageable pageable);
+  Page<Good> findAllByCategoryId(Long categoryId, Pageable pageable);
 
-  List<Good> findAllByPriceBetween(Float bottomBorder, Float topBorder, Pageable pageable);
+  Page<Good> findAllByPriceBetween(Float bottomBorder, Float topBorder, Pageable pageable);
+
+  @Query("select 1 as result from Good g where exists(select g.id from Good g where id is not null)")
+  Long exists();
 
 }

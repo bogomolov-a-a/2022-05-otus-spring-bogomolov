@@ -38,10 +38,8 @@ public class Good {
   @Enumerated(EnumType.STRING)
   private GoodUnit goodUnit;
   @NonNull
-  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  private String producerName;
+  private Long producerId;
   @NonNull
-  @Pattern(regexp = "(A-Za-zА-Яа-яЁё\\-\\s\\.\\(\\))")
-  private String categoryName;
+  private Long categoryId;
 
 }

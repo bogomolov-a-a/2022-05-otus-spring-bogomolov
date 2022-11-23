@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.good.dao.GoodRepository;
 import ru.otus.group202205.homework.spring19.zooshop.good.dto.GoodDto;
@@ -20,12 +21,13 @@ public class GoodServiceImpl implements GoodService {
   private final GoodMapper goodMapper;
 
   @Override
-  public List<GoodDto> findAll(int pageNumber, int pageSize) {
+  public List<GoodDto> findAll(Pageable pageable, Sort sort) {
+    pageable
+        .getSort()
+        .and(sort);
     return goodRepository
-        .findAll(Pageable
-            .ofSize(pageSize)
-            .withPage(pageNumber))
-        .get()
+        .findAll(pageable)
+        .stream()
         .map(goodMapper::toDto)
         .collect(Collectors.toList());
   }
@@ -38,49 +40,53 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDto> findAllByName(String name, int pageNumber, int pageSize) {
+  public List<GoodDto> findAllByName(String name, Pageable pageable, Sort sort) {
+    pageable
+        .getSort()
+        .and(sort);
     return goodRepository
         .findAllByName(name,
-            Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber))
+            pageable)
         .stream()
         .map(goodMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
-  public List<GoodDto> findAllByProducerName(String producerName, int pageNumber, int pageSize) {
+  public List<GoodDto> findAllByProducerId(Long producerId, Pageable pageable, Sort sort) {
+    pageable
+        .getSort()
+        .and(sort);
     return goodRepository
-        .findAllByProducerName(producerName,
-            Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber))
+        .findAllByProducerId(producerId,
+            pageable)
         .stream()
         .map(goodMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
-  public List<GoodDto> findAllByCategoryName(String categoryName, int pageNumber, int pageSize) {
+  public List<GoodDto> findAllByCategoryId(Long categoryId, Pageable pageable, Sort sort) {
+    pageable
+        .getSort()
+        .and(sort);
     return goodRepository
-        .findAllByCategoryName(categoryName,
-            Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber))
+        .findAllByCategoryId(categoryId,
+            pageable)
         .stream()
         .map(goodMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
-  public List<GoodDto> findAllByPriceBetween(Float bottomBorder, Float topBorder, int pageNumber, int pageSize) {
+  public List<GoodDto> findAllByPriceBetween(Float bottomBorder, Float topBorder, Pageable pageable, Sort sort) {
+    pageable
+        .getSort()
+        .and(sort);
     return goodRepository
         .findAllByPriceBetween(bottomBorder,
             topBorder,
-            Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber))
+            pageable)
         .stream()
         .map(goodMapper::toDto)
         .collect(Collectors.toList());
@@ -102,16 +108,20 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public void deleteAllByProducerName(String producerName) {
-    List<Good> goods = goodRepository.findAllByProducerName(producerName,
-        Pageable.unpaged());
+  public void deleteAllByProducerId(Long producerId) {
+    List<Good> goods = goodRepository
+        .findAllByProducerId(producerId,
+            Pageable.unpaged())
+        .getContent();
     goodRepository.deleteAll(goods);
   }
 
   @Override
-  public void deleteAllByCategoryName(String categoryName) {
-    List<Good> goods = goodRepository.findAllByCategoryName(categoryName,
-        Pageable.unpaged());
+  public void deleteAllByCategoryId(Long categoryId) {
+    List<Good> goods = goodRepository
+        .findAllByCategoryId(categoryId,
+            Pageable.unpaged())
+        .getContent();
     goodRepository.deleteAll(goods);
   }
 
