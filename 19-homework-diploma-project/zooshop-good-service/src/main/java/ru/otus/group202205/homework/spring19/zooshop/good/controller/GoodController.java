@@ -47,7 +47,7 @@ public class GoodController {
   }
 
   @Operation(summary = "Get all goods", description = "Find all goods with pagination.")
-  @GetMapping(value = "/page/{number}/per/{size}/sort/{sort}", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+  @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
   public List<GoodDto> findAll(
       @ParameterObject Pageable pageable) {
     return goodService.findAll(org.springframework.data.domain.Pageable
@@ -72,7 +72,7 @@ public class GoodController {
   @ApiResponse(responseCode = "200",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = GoodDto.class))})
-  @GetMapping(value = "/page/{number}/per/{size}/sort/{sort}/by/category", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+  @GetMapping(value = "/by/category", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
   public List<GoodDto> findByCategoryId(@RequestParam("categoryId") Long categoryId,
       @ParameterObject Pageable pageable) {
     return goodService.findAllByCategoryId(categoryId,
@@ -87,7 +87,7 @@ public class GoodController {
   @ApiResponse(responseCode = "200",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = GoodDto.class))})
-  @GetMapping(value = "/page/{number}/per/{size}/sort/{sort}/by/producer", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+  @GetMapping(value = "/by/producer", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
   public List<GoodDto> findByProducerId(@RequestParam("producerId") Long producerId,
       @ParameterObject Pageable pageable) {
     return goodService.findAllByProducerId(producerId,
@@ -102,7 +102,7 @@ public class GoodController {
   @ApiResponse(responseCode = "200",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = GoodDto.class))})
-  @GetMapping(value = "/page/{number}/per/{size}/sort/{sort}/by/name", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+  @GetMapping(value = "/by/name", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
   public List<GoodDto> findByName(@RequestParam("name") String name,
       @ParameterObject Pageable pageable) {
     return goodService.findAllByName(name,
@@ -117,7 +117,7 @@ public class GoodController {
   @ApiResponse(responseCode = "200",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = GoodDto.class))})
-  @GetMapping(value = "/page/{number}/per/{size}/sort/{sort}/by/price", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+  @GetMapping(value = "/by/price", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
   public List<GoodDto> findByPrice(@RequestParam("startPrice") Float startPrice,
       @RequestParam("endPrice") Float endPrice,
       @ParameterObject Pageable pageable) {
