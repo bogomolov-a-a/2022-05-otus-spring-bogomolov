@@ -8,8 +8,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @OpenAPIDefinition(info = @Info(version = "0.1.0",
     title = "Zooshop address service",
-    description = "Intended for creating, reading, updating and deleting address information. Has its own database.\n"
-        + "There is a search in several fields (name, address)."))
+    description = "Intended for creating, reading, updating and deleting address information. Has its own database."))
 @Configuration
 public class SwaggerConfig {
 

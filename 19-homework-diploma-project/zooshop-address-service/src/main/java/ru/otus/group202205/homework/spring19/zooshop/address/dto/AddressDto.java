@@ -12,7 +12,6 @@ import org.springframework.lang.NonNull;
 @Schema(title = "Address information")
 public class AddressDto {
 
-  @Schema(title = "Address id")
   private Long id;
   @NonNull
   @Schema
