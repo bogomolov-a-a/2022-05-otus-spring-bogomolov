@@ -1,0 +1,1 @@
+org.springframework.context.ApplicationListener=ru.otus.group202205.homework.spring19.zooshop.orderposition.config.LiquibaseSecureParsingPropertyEnvListener
