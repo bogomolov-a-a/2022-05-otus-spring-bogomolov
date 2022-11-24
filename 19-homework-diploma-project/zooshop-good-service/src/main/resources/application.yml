@@ -43,9 +43,9 @@ springdoc:
     operations-sorter: ALPHA
     display-operation-id: true
     path: /swagger-ui/
-    url: /api/goods/swagger-ui/swagger-ui/openapi-docs/swagger-config
-    config-url: /api/goods/swagger-ui/swagger-ui/openapi-docs/swagger-config
+    url: /swagger-ui/swagger-ui/openapi-docs/swagger-config
     disable-swagger-default-url: true
+    query-config-enabled: true
   api-docs:
     resolve-schema-properties: true
     version: OPENAPI_3_0
