@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="artem.bogomolov" context="production or tests or releaseCandidate"
+    id="2022-11-24-create-category-table">
+    <sqlFile path="2022/2022-11-24-create-category-table.sql" relativeToChangelogFile="true"/>
+  </changeSet>
+  <changeSet author="artem.bogomolov" context="production or releaseCandidate"
+    id="2022-11-21-fill-release-candidate">
+    <sqlFile path="2022/2022-11-21-fill-release-candidate.sql" relativeToChangelogFile="true"/>
+  </changeSet>
+</databaseChangeLog>
