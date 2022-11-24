@@ -40,7 +40,7 @@ public class ProducerController {
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = ProducerDto.class))})
   @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
-  public ProducerDto createGood(
+  public ProducerDto createProducer(
       @Parameter(content = @Content(
           mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"
       )) @RequestBody ProducerDto goodDto) {
@@ -83,7 +83,7 @@ public class ProducerController {
             "id"));
   }
 
-  @Operation(summary = "Get producer infos by good name")
+  @Operation(summary = "Get producer infos by producer name")
   @ApiResponse(responseCode = "200",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = ProducerDto.class))})
@@ -103,25 +103,25 @@ public class ProducerController {
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = ProducerDto.class))})
   @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
-  public ProducerDto updateGood(@RequestBody ProducerDto goodDto) {
+  public ProducerDto updateProducer(@RequestBody ProducerDto goodDto) {
     return producerService.save(goodDto);
   }
 
   @Operation(summary = "Delete all producers in db")
   @DeleteMapping("/")
-  public void deleteAllGoods() {
+  public void deleteAllProducers() {
     producerService.deleteAll();
   }
 
   @Operation(summary = "Delete producer by id")
   @DeleteMapping("/{id}")
-  public void deleteGoodById(@PathVariable("id") Long id) {
+  public void deleteProducerById(@PathVariable("id") Long id) {
     producerService.deleteById(id);
   }
 
   @Operation(summary = "Delete producer by address id")
   @DeleteMapping("/by/address/{addressId}")
-  public void deleteAllGoodsByProducerId(@PathVariable("addressId") Long addressId) {
+  public void deleteAllProducersByAddressId(@PathVariable("addressId") Long addressId) {
     producerService.deleteAllByAddressId(addressId);
   }
 

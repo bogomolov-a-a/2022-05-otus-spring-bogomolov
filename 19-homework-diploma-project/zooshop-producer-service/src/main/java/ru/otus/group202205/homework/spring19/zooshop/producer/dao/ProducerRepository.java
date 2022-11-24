@@ -10,6 +10,8 @@ public interface ProducerRepository extends PagingAndSortingRepository<Producer,
 
   Page<Producer> findAllByAddressId(Long addressId, Pageable pageable);
 
+  Page<Producer> findAllByName(String name, Pageable pageable);
+
   @Query("select 1 as result from Producer p where exists(select p.id from Producer p where id is not null)")
   Long exists();
 

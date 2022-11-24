@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.producer.dao.ProducerRepository;
 import ru.otus.group202205.homework.spring19.zooshop.producer.dto.ProducerDto;
+import ru.otus.group202205.homework.spring19.zooshop.producer.feign.AddressServiceFeignProxy;
 import ru.otus.group202205.homework.spring19.zooshop.producer.feign.GoodServiceFeignProxy;
 import ru.otus.group202205.homework.spring19.zooshop.producer.mapper.ProducerMapper;
 import ru.otus.group202205.homework.spring19.zooshop.producer.model.Producer;
@@ -20,7 +21,8 @@ public class ProducerServiceImpl implements ProducerService {
 
   private final ProducerRepository producerRepository;
   private final ProducerMapper producerMapper;
-  private final GoodServiceFeignProxy goodServiceFeignProxy;
+  private final GoodServiceFeignProxy producerServiceFeignProxy;
+  private final AddressServiceFeignProxy addressServiceFeignProxy;
 
   @Override
   public List<ProducerDto> findAll(Pageable pageable, Sort sort) {
@@ -43,7 +45,15 @@ public class ProducerServiceImpl implements ProducerService {
 
   @Override
   public List<ProducerDto> findAllByName(String name, Pageable pageable, Sort sort) {
-    return null;
+    pageable
+        .getSort()
+        .and(sort);
+    return producerRepository
+        .findAllByName(name,
+            pageable)
+        .stream()
+        .map(producerMapper::toDto)
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -60,13 +70,14 @@ public class ProducerServiceImpl implements ProducerService {
   }
 
   @Override
-  public ProducerDto save(ProducerDto good) {
-    return producerMapper.toDto(producerRepository.save(producerMapper.toEntity(good)));
+  public ProducerDto save(ProducerDto producer) {
+    addressServiceFeignProxy.existsById(producer.getAddressId());
+    return producerMapper.toDto(producerRepository.save(producerMapper.toEntity(producer)));
   }
 
   @Override
   public void deleteById(Long id) {
-    goodServiceFeignProxy.deleteAllByProducer(id);
+    producerServiceFeignProxy.deleteAllByProducer(id);
     producerRepository.deleteById(id);
   }
 
