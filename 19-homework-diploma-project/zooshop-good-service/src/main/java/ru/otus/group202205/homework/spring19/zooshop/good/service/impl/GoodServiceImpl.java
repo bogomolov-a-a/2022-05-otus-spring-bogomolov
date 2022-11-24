@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.good.dao.GoodRepository;
 import ru.otus.group202205.homework.spring19.zooshop.good.dto.GoodDto;
+import ru.otus.group202205.homework.spring19.zooshop.good.feign.CategoryServiceFeignProxy;
 import ru.otus.group202205.homework.spring19.zooshop.good.feign.ProducerServiceFeignProxy;
 import ru.otus.group202205.homework.spring19.zooshop.good.mapper.GoodMapper;
 import ru.otus.group202205.homework.spring19.zooshop.good.model.Good;
@@ -21,6 +22,7 @@ public class GoodServiceImpl implements GoodService {
   private final GoodRepository goodRepository;
   private final GoodMapper goodMapper;
   private final ProducerServiceFeignProxy producerServiceFeignProxy;
+  private final CategoryServiceFeignProxy categoryServiceFeignProxy;
 
   @Override
   public List<GoodDto> findAll(Pageable pageable, Sort sort) {
@@ -97,6 +99,7 @@ public class GoodServiceImpl implements GoodService {
   @Override
   public GoodDto save(GoodDto good) {
     producerServiceFeignProxy.existsById(good.getProducerId());
+    categoryServiceFeignProxy.existsById(good.getCategoryId());
     return goodMapper.toDto(goodRepository.save(goodMapper.toEntity(good)));
   }
 
