@@ -48,6 +48,14 @@ public class RouteConfig {
                     .rewritePath("/api/categories/([\\w]*)",
                         "/$1"))
                 .uri("lb://zooshop-category-service"))
+        .route("zooshop-actions-service-route",
+            r -> r
+                .path("/api/actions/**")
+                .filters(g -> g
+                    .filter(loggingFilterFactory.apply(new LoggingFilterFactoryConfig()))
+                    .rewritePath("/api/actions/([\\w]*)",
+                        "/$1"))
+                .uri("lb://zooshop-action-service"))
         .build();
   }
 
