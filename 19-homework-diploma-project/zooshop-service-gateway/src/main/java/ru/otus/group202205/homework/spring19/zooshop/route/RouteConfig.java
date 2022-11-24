@@ -16,14 +16,14 @@ public class RouteConfig {
   public RouteLocator customRouteLocator(RouteLocatorBuilder routeLocatorBuilder, LoggingFilterFactory loggingFilterFactory) {
     return routeLocatorBuilder
         .routes()
-        .route("zooshop-auth-service-route",
+        .route("zooshop-address-service-route",
             r -> r
-                .path("/api/auth/**")
+                .path("/api/addresses/**")
                 .filters(g -> g
                     .filter(loggingFilterFactory.apply(new LoggingFilterFactoryConfig()))
-                    .rewritePath("/api/auth/([\\w]*)",
+                    .rewritePath("/api/addresses/([\\w]*)",
                         "/$1"))
-                .uri("lb://zooshop-auth-service-route"))
+                .uri("lb://zooshop-address-service"))
         .route("zooshop-goods-service-route",
             r -> r
                 .path("/api/goods/**")
