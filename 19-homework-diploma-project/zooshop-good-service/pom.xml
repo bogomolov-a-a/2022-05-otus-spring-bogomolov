@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>zooshop-producer-service</artifactId>
+  <artifactId>zooshop-good-service</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -154,6 +154,7 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
@@ -174,6 +175,10 @@
       <artifactId>mapstruct</artifactId>
       <groupId>org.mapstruct</groupId>
       <version>${version.mapstruct}</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <groupId>org.springframework.cloud</groupId>
     </dependency>
 
     <dependency>
@@ -213,7 +218,7 @@
     <version.mapstruct>1.5.3.Final</version.mapstruct>
     <version.maven.plugin.compiler>3.8.1</version.maven.plugin.compiler>
     <version.maven.plugin.jacoco>0.8.8</version.maven.plugin.jacoco>
-    <version.spring.openapi-ui>1.6.12</version.spring.openapi-ui>
+    <version.spring.openapi-ui>1.6.13</version.spring.openapi-ui>
     <version.spring-cloud>2021.0.5</version.spring-cloud>
   </properties>
   <version>1.0.0</version>
