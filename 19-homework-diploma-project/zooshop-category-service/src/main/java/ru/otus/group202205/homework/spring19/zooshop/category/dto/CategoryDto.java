@@ -15,6 +15,7 @@ public class CategoryDto {
   private Long id;
   @NonNull
   private String name;
+  @Schema(title = "Parent category id", description = "For category tree")
   private Long parentId;
 
 }

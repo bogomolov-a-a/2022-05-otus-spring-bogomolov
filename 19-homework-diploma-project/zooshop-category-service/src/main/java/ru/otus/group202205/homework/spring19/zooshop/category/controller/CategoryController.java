@@ -34,13 +34,13 @@ public class CategoryController {
 
   private final CategoryService categoryService;
 
-  @Operation(summary = "Create new category", description = "Address must be already created, otherwise will be 422")
+  @Operation(summary = "Create new category", description = "Parent category must be already created(if used), otherwise will be 422")
   @ResponseStatus(HttpStatus.CREATED)
   @ApiResponse(responseCode = "201",
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = CategoryDto.class))})
   @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
-  public CategoryDto createAddress(
+  public CategoryDto createCategory(
       @Parameter(content = @Content(
           mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"
       )) @RequestBody CategoryDto categoryDto) {
@@ -73,7 +73,7 @@ public class CategoryController {
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = CategoryDto.class))})
   @GetMapping(value = "/by/name", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
-  public List<CategoryDto> findByText(@RequestParam("name") String name,
+  public List<CategoryDto> findByName(@RequestParam("name") String name,
       @ParameterObject Pageable pageable) {
     return categoryService.findAllByName(name,
         org.springframework.data.domain.Pageable
@@ -88,19 +88,19 @@ public class CategoryController {
       content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8",
           schema = @Schema(implementation = CategoryDto.class))})
   @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
-  public CategoryDto updateAddress(@RequestBody CategoryDto categoryDto) {
+  public CategoryDto updateCategory(@RequestBody CategoryDto categoryDto) {
     return categoryService.save(categoryDto);
   }
 
   @Operation(summary = "Delete all categoryes in db")
   @DeleteMapping("/")
-  public void deleteAllAddresses() {
+  public void deleteAllCategories() {
     categoryService.deleteAll();
   }
 
   @Operation(summary = "Delete category by id")
   @DeleteMapping("/{id}")
-  public void deleteAddressById(@PathVariable("id") Long id) {
+  public void deleteCategoryById(@PathVariable("id") Long id) {
     categoryService.deleteById(id);
   }
 
