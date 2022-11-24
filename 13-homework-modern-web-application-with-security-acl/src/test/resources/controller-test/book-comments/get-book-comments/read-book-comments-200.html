@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List of book comments in library</title>
+  <script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+    function deleteBook(bookCommentId){
+        $.ajax(
+        {
+          url:"/book-comments/"+bookCommentId,
+          method:"DELETE"
+        }).done(function(){window.location="/book-comments/page"})
+       }
+   function handleBookComment(bookComment){
+       var text='<tr>'
+       text+='<td>'+bookComment.id+'</td>'
+       text+='<td>'+bookComment.text+'</td>'
+       text+='<td>'+bookComment.created+'</td>'
+       text+='<td>'+bookComment.book.title+'</td>'
+       text+='<td><a href="/book-comments/'+bookComment.id+'/page/READ">View card</a></td>'
+       text+='<td><a href="/book-comments/'+bookComment.id+'/page/UPDATE">Modify card</a></td>'
+       text+='<td><a href="#" onclick="deleteBook('+bookComment.id+'); return false">Delete card</a></td>'
+       text+='</tr>'
+       return text
+   }
+   function handleBookCommentList(bookCommentList)
+   {
+    var text =''
+    if(bookCommentList.length==0)
+    {
+      text+='<tr>'
+      text+='<td colspan="7">No records found!</td>'
+      text+='</tr>'
+      return text
+    }
+    bookCommentList.forEach(function (bookComment){ text+=handleBookComment(bookComment)})
+    return text
+  }
+  $( document ).ready(function(){
+      $.ajax({
+        url:'/book-comments'
+      }).done(function(bookCommentList){
+        $('#book-comments-list > tbody ')[0].innerHTML=handleBookCommentList(bookCommentList)
+      })
+   })
+
+
+
+
+
+
+
+  </script>
+</head>
+<body>
+<div>
+  <div>
+    <p>You can add new bookComment comment with button
+    <form action="/book-comments/0/page/CREATE">
+      <input type="submit" value="Create bookComment card"/>
+    </form>
+    or return to <a href="/">Return to index</a>
+    </p>
+  </div>
+  <div><p>Following book comments found in our library:</p>
+    <table border="1" id="book-comment-list">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Text</th>
+        <th>Created</th>
+        <th>Book title</th>
+        <th>View Card</th>
+        <th>Modify Card</th>
+        <th>Delete Card</th>
+      </tr>
+      </thead>
+      <tbody/>
+    </table>
+  </div>
+</div>
+</body>
+</html>

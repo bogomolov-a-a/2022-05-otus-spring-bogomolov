@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    username: sa
+    password: sa
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  liquibase:
+    change-log: db/db-change-log-master.xml
+    contexts: production
+server:
+  error:
+    whitelabel:
+      enabled: false
