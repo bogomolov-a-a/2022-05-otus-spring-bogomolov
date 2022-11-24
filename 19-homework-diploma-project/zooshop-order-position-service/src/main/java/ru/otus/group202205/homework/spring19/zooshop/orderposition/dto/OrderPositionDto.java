@@ -13,8 +13,10 @@ import org.springframework.lang.NonNull;
 public class OrderPositionDto {
 
   private Long id;
+  @Schema(title = "good name")
   @NonNull
   private String name;
+  @Schema(title = "good id")
   @NonNull
   private Long goodId;
   @NonNull
