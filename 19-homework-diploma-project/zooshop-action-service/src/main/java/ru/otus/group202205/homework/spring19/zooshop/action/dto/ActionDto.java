@@ -19,25 +19,34 @@ import ru.otus.group202205.homework.spring19.zooshop.action.model.DiscountType;
 @Schema(title = "Action information")
 public class ActionDto {
 
+  @Schema(title = "Action id")
   private Long id;
   @NonNull
+  @Schema(title = "Action name")
   private String name;
+  @Schema(title = "Action description")
+
   private String description;
   @NonNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @Schema(title = "Action start date")
   private LocalDateTime startDate;
   @NonNull
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @Schema(title = "Action end date", description = "may be null, if action no has end date")
   private LocalDateTime endDate;
   @NonNull
+  @Schema(title = "Action discount type")
   private DiscountType discountType;
   @NonNull
+  @Schema(title = "Action discount value")
   private Float discountValue;
   @NonNull
+  @Schema(title = "Good id for the action", description = "N..1, one good - more actions")
   private Long goodId;
 
 }

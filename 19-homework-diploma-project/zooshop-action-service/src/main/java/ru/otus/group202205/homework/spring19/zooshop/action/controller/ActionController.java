@@ -92,9 +92,9 @@ public class ActionController {
     return actionService.save(actionDto);
   }
 
-  @Operation(summary = "Delete all actiones in db")
+  @Operation(summary = "Delete all actions in db")
   @DeleteMapping("/")
-  public void deleteAllActiones() {
+  public void deleteAllActions() {
     actionService.deleteAll();
   }
 

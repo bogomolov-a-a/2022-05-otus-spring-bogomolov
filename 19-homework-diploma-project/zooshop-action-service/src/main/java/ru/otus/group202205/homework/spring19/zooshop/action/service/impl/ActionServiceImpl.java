@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.action.dao.ActionRepository;
 import ru.otus.group202205.homework.spring19.zooshop.action.dto.ActionDto;
 import ru.otus.group202205.homework.spring19.zooshop.action.feign.GoodService;
-import ru.otus.group202205.homework.spring19.zooshop.action.mapper.OrderPositionMapper;
+import ru.otus.group202205.homework.spring19.zooshop.action.mapper.ActionMapper;
 import ru.otus.group202205.homework.spring19.zooshop.action.service.ActionService;
 
 @Service
@@ -18,7 +18,7 @@ import ru.otus.group202205.homework.spring19.zooshop.action.service.ActionServic
 public class ActionServiceImpl implements ActionService {
 
   private final ActionRepository actionRepository;
-  private final OrderPositionMapper orderPositionMapper;
+  private final ActionMapper actionMapper;
   private final GoodService goodService;
 
   @Override
@@ -29,13 +29,13 @@ public class ActionServiceImpl implements ActionService {
     return actionRepository
         .findAll(pageable)
         .stream()
-        .map(orderPositionMapper::toDto)
+        .map(actionMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
   public ActionDto findById(Long id) {
-    return orderPositionMapper.toDto(actionRepository
+    return actionMapper.toDto(actionRepository
         .findById(id)
         .orElseThrow());
   }
@@ -49,7 +49,7 @@ public class ActionServiceImpl implements ActionService {
         .findAllByName(name,
             pageable)
         .stream()
-        .map(orderPositionMapper::toDto)
+        .map(actionMapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -62,7 +62,7 @@ public class ActionServiceImpl implements ActionService {
         .findAllByGoodId(goodId,
             pageable)
         .stream()
-        .map(orderPositionMapper::toDto)
+        .map(actionMapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -70,7 +70,7 @@ public class ActionServiceImpl implements ActionService {
   @Override
   public ActionDto save(ActionDto action) {
     goodService.existsById(action.getGoodId());
-    return orderPositionMapper.toDto(actionRepository.save(orderPositionMapper.toEntity(action)));
+    return actionMapper.toDto(actionRepository.save(actionMapper.toEntity(action)));
   }
 
   @Override

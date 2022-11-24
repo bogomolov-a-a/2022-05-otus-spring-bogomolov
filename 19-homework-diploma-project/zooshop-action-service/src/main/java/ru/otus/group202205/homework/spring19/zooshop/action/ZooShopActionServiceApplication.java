@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ActionServiceApplication {
+public class ZooShopActionServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(ActionServiceApplication.class,
+    SpringApplication.run(ZooShopActionServiceApplication.class,
         args);
   }
 

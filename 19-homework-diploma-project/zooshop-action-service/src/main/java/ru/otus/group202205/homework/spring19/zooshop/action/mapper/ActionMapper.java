@@ -8,7 +8,7 @@ import ru.otus.group202205.homework.spring19.zooshop.action.model.Action;
 
 @Mapper(componentModel = ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR,
     implementationPackage = "ru.otus.group202205.homework.spring19.zooshop.action.mapper.impl")
-public interface OrderPositionMapper {
+public interface ActionMapper {
 
   ActionDto toDto(Action action);
 
