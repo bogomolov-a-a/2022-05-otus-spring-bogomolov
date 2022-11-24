@@ -16,15 +16,15 @@ public class RouteConfig {
   public RouteLocator customRouteLocator(RouteLocatorBuilder routeLocatorBuilder, LoggingFilterFactory loggingFilterFactory) {
     return routeLocatorBuilder
         .routes()
-        .route("auth-service-route",
+        .route("zooshop-auth-service-route",
             r -> r
                 .path("/api/auth/**")
                 .filters(g -> g
                     .filter(loggingFilterFactory.apply(new LoggingFilterFactoryConfig()))
                     .rewritePath("/api/auth/([\\w]*)",
                         "/$1"))
-                .uri("http://localhost:8101/auth"))
-        .route("goods-service-route",
+                .uri("lb://zooshop-auth-service-route"))
+        .route("zooshop-goods-service-route",
             r -> r
                 .path("/api/goods/**")
                 .filters(g -> g
@@ -32,6 +32,14 @@ public class RouteConfig {
                     .rewritePath("/api/goods/([\\w]*)",
                         "/$1"))
                 .uri("lb://zooshop-good-service"))
+        .route("zooshop-producers-service-route",
+            r -> r
+                .path("/api/producers/**")
+                .filters(g -> g
+                    .filter(loggingFilterFactory.apply(new LoggingFilterFactoryConfig()))
+                    .rewritePath("/api/producers/([\\w]*)",
+                        "/$1"))
+                .uri("lb://zooshop-producer-service"))
         .build();
   }
 
