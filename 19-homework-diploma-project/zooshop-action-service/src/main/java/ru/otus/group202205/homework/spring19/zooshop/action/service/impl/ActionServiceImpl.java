@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.action.dao.ActionRepository;
 import ru.otus.group202205.homework.spring19.zooshop.action.dto.ActionDto;
 import ru.otus.group202205.homework.spring19.zooshop.action.feign.GoodServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.action.mapper.ActionMapper;
+import ru.otus.group202205.homework.spring19.zooshop.action.mapper.OrderPositionMapper;
 import ru.otus.group202205.homework.spring19.zooshop.action.service.ActionService;
 
 @Service
@@ -18,7 +18,7 @@ import ru.otus.group202205.homework.spring19.zooshop.action.service.ActionServic
 public class ActionServiceImpl implements ActionService {
 
   private final ActionRepository actionRepository;
-  private final ActionMapper actionMapper;
+  private final OrderPositionMapper orderPositionMapper;
   private final GoodServiceFeignProxy goodServiceFeignProxy;
 
   @Override
@@ -29,13 +29,13 @@ public class ActionServiceImpl implements ActionService {
     return actionRepository
         .findAll(pageable)
         .stream()
-        .map(actionMapper::toDto)
+        .map(orderPositionMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
   public ActionDto findById(Long id) {
-    return actionMapper.toDto(actionRepository
+    return orderPositionMapper.toDto(actionRepository
         .findById(id)
         .orElseThrow());
   }
@@ -49,7 +49,7 @@ public class ActionServiceImpl implements ActionService {
         .findAllByName(name,
             pageable)
         .stream()
-        .map(actionMapper::toDto)
+        .map(orderPositionMapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -62,7 +62,7 @@ public class ActionServiceImpl implements ActionService {
         .findAllByGoodId(goodId,
             pageable)
         .stream()
-        .map(actionMapper::toDto)
+        .map(orderPositionMapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -70,7 +70,7 @@ public class ActionServiceImpl implements ActionService {
   @Override
   public ActionDto save(ActionDto action) {
     goodServiceFeignProxy.existsById(action.getGoodId());
-    return actionMapper.toDto(actionRepository.save(actionMapper.toEntity(action)));
+    return orderPositionMapper.toDto(actionRepository.save(orderPositionMapper.toEntity(action)));
   }
 
   @Override
