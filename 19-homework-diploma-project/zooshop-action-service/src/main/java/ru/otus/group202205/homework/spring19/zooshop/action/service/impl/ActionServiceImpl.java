@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.action.dao.ActionRepository;
 import ru.otus.group202205.homework.spring19.zooshop.action.dto.ActionDto;
-import ru.otus.group202205.homework.spring19.zooshop.action.feign.GoodServiceFeignProxy;
+import ru.otus.group202205.homework.spring19.zooshop.action.feign.GoodService;
 import ru.otus.group202205.homework.spring19.zooshop.action.mapper.OrderPositionMapper;
 import ru.otus.group202205.homework.spring19.zooshop.action.service.ActionService;
 
@@ -19,7 +19,7 @@ public class ActionServiceImpl implements ActionService {
 
   private final ActionRepository actionRepository;
   private final OrderPositionMapper orderPositionMapper;
-  private final GoodServiceFeignProxy goodServiceFeignProxy;
+  private final GoodService goodService;
 
   @Override
   public List<ActionDto> findAll(Pageable pageable, Sort sort) {
@@ -69,7 +69,7 @@ public class ActionServiceImpl implements ActionService {
 
   @Override
   public ActionDto save(ActionDto action) {
-    goodServiceFeignProxy.existsById(action.getGoodId());
+    goodService.existsById(action.getGoodId());
     return orderPositionMapper.toDto(actionRepository.save(orderPositionMapper.toEntity(action)));
   }
 

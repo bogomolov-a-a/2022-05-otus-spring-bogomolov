@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.producer.dao.ProducerRepository;
 import ru.otus.group202205.homework.spring19.zooshop.producer.dto.ProducerDto;
-import ru.otus.group202205.homework.spring19.zooshop.producer.feign.AddressServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.producer.feign.GoodServiceFeignProxy;
+import ru.otus.group202205.homework.spring19.zooshop.producer.feign.AddressService;
+import ru.otus.group202205.homework.spring19.zooshop.producer.feign.GoodService;
 import ru.otus.group202205.homework.spring19.zooshop.producer.mapper.ProducerMapper;
 import ru.otus.group202205.homework.spring19.zooshop.producer.model.Producer;
 import ru.otus.group202205.homework.spring19.zooshop.producer.service.ProducerService;
@@ -21,8 +21,8 @@ public class ProducerServiceImpl implements ProducerService {
 
   private final ProducerRepository producerRepository;
   private final ProducerMapper producerMapper;
-  private final GoodServiceFeignProxy producerServiceFeignProxy;
-  private final AddressServiceFeignProxy addressServiceFeignProxy;
+  private final GoodService producerServiceFeignProxy;
+  private final AddressService addressService;
 
   @Override
   public List<ProducerDto> findAll(Pageable pageable, Sort sort) {
@@ -71,7 +71,7 @@ public class ProducerServiceImpl implements ProducerService {
 
   @Override
   public ProducerDto save(ProducerDto producer) {
-    addressServiceFeignProxy.existsById(producer.getAddressId());
+    addressService.existsById(producer.getAddressId());
     return producerMapper.toDto(producerRepository.save(producerMapper.toEntity(producer)));
   }
 

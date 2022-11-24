@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.dao.OrderPositionRepository;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.dto.OrderPositionDto;
-import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.ActionServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.GoodServiceFeignProxy;
+import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.ActionService;
+import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.GoodService;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.mapper.OrderPositionMapper;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.model.OrderPosition;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.service.OrderPositionService;
@@ -21,9 +21,9 @@ public class OrderPositionServiceImpl implements OrderPositionService {
 
   private final OrderPositionRepository orderPositionRepository;
   private final OrderPositionMapper actionMapper;
-  private final GoodServiceFeignProxy goodServiceFeignProxy;
+  private final GoodService goodService;
 
-  private final ActionServiceFeignProxy actionServiceFeignProxy;
+  private final ActionService actionService;
 
   @Override
   public List<OrderPositionDto> findAll(Pageable pageable, Sort sort) {
@@ -61,8 +61,8 @@ public class OrderPositionServiceImpl implements OrderPositionService {
 
   @Override
   public OrderPositionDto save(OrderPositionDto orderPosition) {
-    goodServiceFeignProxy.existsById(orderPosition.getGoodId());
-    actionServiceFeignProxy.existsById(orderPosition.getActionId());
+    goodService.existsById(orderPosition.getGoodId());
+    actionService.existsById(orderPosition.getActionId());
     return actionMapper.toDto(orderPositionRepository.save(actionMapper.toEntity(orderPosition)));
   }
 

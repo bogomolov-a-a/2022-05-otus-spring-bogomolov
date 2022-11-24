@@ -9,10 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.good.dao.GoodRepository;
 import ru.otus.group202205.homework.spring19.zooshop.good.dto.GoodDto;
-import ru.otus.group202205.homework.spring19.zooshop.good.feign.ActionServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.good.feign.CategoryServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.good.feign.OrderPositionServiceFeignProxy;
-import ru.otus.group202205.homework.spring19.zooshop.good.feign.ProducerServiceFeignProxy;
+import ru.otus.group202205.homework.spring19.zooshop.good.feign.ActionService;
+import ru.otus.group202205.homework.spring19.zooshop.good.feign.CategoryService;
+import ru.otus.group202205.homework.spring19.zooshop.good.feign.OrderPositionService;
+import ru.otus.group202205.homework.spring19.zooshop.good.feign.ProducerService;
 import ru.otus.group202205.homework.spring19.zooshop.good.mapper.GoodMapper;
 import ru.otus.group202205.homework.spring19.zooshop.good.model.Good;
 import ru.otus.group202205.homework.spring19.zooshop.good.service.GoodService;
@@ -23,10 +23,10 @@ public class GoodServiceImpl implements GoodService {
 
   private final GoodRepository goodRepository;
   private final GoodMapper goodMapper;
-  private final ProducerServiceFeignProxy producerServiceFeignProxy;
-  private final CategoryServiceFeignProxy categoryServiceFeignProxy;
-  private final ActionServiceFeignProxy actionServiceFeignProxy;
-  private final OrderPositionServiceFeignProxy orderPositionServiceFeignProxy;
+  private final ProducerService producerService;
+  private final CategoryService categoryService;
+  private final ActionService actionService;
+  private final OrderPositionService orderPositionService;
 
   @Override
   public List<GoodDto> findAll(Pageable pageable, Sort sort) {
@@ -102,15 +102,15 @@ public class GoodServiceImpl implements GoodService {
 
   @Override
   public GoodDto save(GoodDto good) {
-    producerServiceFeignProxy.existsById(good.getProducerId());
-    categoryServiceFeignProxy.existsById(good.getCategoryId());
+    producerService.existsById(good.getProducerId());
+    categoryService.existsById(good.getCategoryId());
     return goodMapper.toDto(goodRepository.save(goodMapper.toEntity(good)));
   }
 
   @Override
   public void deleteById(Long id) {
-    actionServiceFeignProxy.deleteAllByGood(id);
-    orderPositionServiceFeignProxy.deleteAllByGood(id);
+    actionService.deleteAllByGood(id);
+    orderPositionService.deleteAllByGood(id);
     goodRepository.deleteById(id);
   }
 

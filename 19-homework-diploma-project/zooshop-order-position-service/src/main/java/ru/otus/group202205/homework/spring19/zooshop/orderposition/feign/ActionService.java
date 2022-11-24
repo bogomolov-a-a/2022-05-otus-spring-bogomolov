@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "zooshop-action-service")
-public interface ActionServiceFeignProxy {
+public interface ActionService {
 
   @GetMapping("/existence/{id}")
   void existsById(@PathVariable("id") Long goodId);

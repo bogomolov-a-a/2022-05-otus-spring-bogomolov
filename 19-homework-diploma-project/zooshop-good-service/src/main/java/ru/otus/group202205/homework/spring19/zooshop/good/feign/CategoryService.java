@@ -4,8 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "zooshop-producer-service")
-public interface ProducerServiceFeignProxy {
+@FeignClient(name = "zooshop-category-service")
+public interface CategoryService {
 
   @GetMapping("/existence/{id}")
   void existsById(@PathVariable("id") Long producerId);

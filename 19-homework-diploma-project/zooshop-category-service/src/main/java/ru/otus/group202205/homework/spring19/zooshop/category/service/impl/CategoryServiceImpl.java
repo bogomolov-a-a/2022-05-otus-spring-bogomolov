@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.category.dao.CategoryRepository;
 import ru.otus.group202205.homework.spring19.zooshop.category.dto.CategoryDto;
-import ru.otus.group202205.homework.spring19.zooshop.category.feign.GoodServiceFeignProxy;
+import ru.otus.group202205.homework.spring19.zooshop.category.feign.GoodService;
 import ru.otus.group202205.homework.spring19.zooshop.category.mapper.CategoryMapper;
 import ru.otus.group202205.homework.spring19.zooshop.category.service.CategoryService;
 
@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
 
   private final CategoryRepository categoryRepository;
   private final CategoryMapper categoryMapper;
-  private final GoodServiceFeignProxy goodServiceFeignProxy;
+  private final GoodService goodService;
 
   @Override
   public List<CategoryDto> findAll(Pageable pageable, Sort sort) {
@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   public void deleteById(Long id) {
-    goodServiceFeignProxy.deleteAllByCategory(id);
+    goodService.deleteAllByCategory(id);
     categoryRepository.deleteById(id);
   }
 

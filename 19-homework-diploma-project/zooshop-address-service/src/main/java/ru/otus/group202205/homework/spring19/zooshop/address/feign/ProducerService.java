@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "zooshop-producer-service")
-public interface ProducerServiceFeignProxy {
+public interface ProducerService {
 
   @DeleteMapping("/by/address/{addressId}")
   void deleteAllByAddress(@PathVariable("addressId") Long addressId);
