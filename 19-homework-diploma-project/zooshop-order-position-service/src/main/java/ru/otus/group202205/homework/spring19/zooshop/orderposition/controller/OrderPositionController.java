@@ -116,6 +116,12 @@ public class OrderPositionController {
     orderPositionService.deleteAllByActionId(actionId);
   }
 
+  @Operation(summary = "Delete order position by action id")
+  @DeleteMapping("/by/order/{actionId}")
+  public void deleteAllByOrderId(@PathVariable("orderId") Long orderId) {
+    orderPositionService.deleteAllByOrderId(orderId);
+  }
+
   @Operation(summary = "Check order position existence by id")
   @GetMapping("/existence/{id}")
   public void existById(@PathVariable("id") Long id) {

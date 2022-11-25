@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ActionService {
 
   @GetMapping("/existence/{id}")
-  void existsById(@PathVariable("id") Long goodId);
+  void existsById(@PathVariable("id") Long id);
 
 }

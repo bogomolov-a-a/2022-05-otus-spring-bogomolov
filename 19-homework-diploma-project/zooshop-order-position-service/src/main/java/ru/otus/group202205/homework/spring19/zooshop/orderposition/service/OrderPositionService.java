@@ -25,4 +25,5 @@ public interface OrderPositionService {
 
   void deleteAllByActionId(Long actionId);
 
+  void deleteAllByOrderId(Long orderId);
 }

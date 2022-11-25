@@ -4,8 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "zooshop-good-service")
-public interface GoodService {
+@FeignClient(name = "zooshop-order-service")
+public interface OrderService {
 
   @GetMapping("/existence/{id}")
   void existsById(@PathVariable("id") Long id);

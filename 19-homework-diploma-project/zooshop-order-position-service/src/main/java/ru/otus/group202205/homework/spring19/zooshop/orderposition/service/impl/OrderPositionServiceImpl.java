@@ -11,6 +11,7 @@ import ru.otus.group202205.homework.spring19.zooshop.orderposition.dao.OrderPosi
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.dto.OrderPositionDto;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.ActionService;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.GoodService;
+import ru.otus.group202205.homework.spring19.zooshop.orderposition.feign.OrderService;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.mapper.OrderPositionMapper;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.model.OrderPosition;
 import ru.otus.group202205.homework.spring19.zooshop.orderposition.service.OrderPositionService;
@@ -20,10 +21,10 @@ import ru.otus.group202205.homework.spring19.zooshop.orderposition.service.Order
 public class OrderPositionServiceImpl implements OrderPositionService {
 
   private final OrderPositionRepository orderPositionRepository;
-  private final OrderPositionMapper actionMapper;
+  private final OrderPositionMapper orderPositionMapper;
   private final GoodService goodService;
-
   private final ActionService actionService;
+  private final OrderService orderService;
 
   @Override
   public List<OrderPositionDto> findAll(Pageable pageable, Sort sort) {
@@ -33,13 +34,13 @@ public class OrderPositionServiceImpl implements OrderPositionService {
     return orderPositionRepository
         .findAll(pageable)
         .stream()
-        .map(actionMapper::toDto)
+        .map(orderPositionMapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
   public OrderPositionDto findById(Long id) {
-    return actionMapper.toDto(orderPositionRepository
+    return orderPositionMapper.toDto(orderPositionRepository
         .findById(id)
         .orElseThrow());
   }
@@ -54,7 +55,7 @@ public class OrderPositionServiceImpl implements OrderPositionService {
         .findAllByOrderId(orderId,
             pageable)
         .stream()
-        .map(actionMapper::toDto)
+        .map(orderPositionMapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -63,7 +64,8 @@ public class OrderPositionServiceImpl implements OrderPositionService {
   public OrderPositionDto save(OrderPositionDto orderPosition) {
     goodService.existsById(orderPosition.getGoodId());
     actionService.existsById(orderPosition.getActionId());
-    return actionMapper.toDto(orderPositionRepository.save(actionMapper.toEntity(orderPosition)));
+    orderService.existsById(orderPosition.getOrderId());
+    return orderPositionMapper.toDto(orderPositionRepository.save(orderPositionMapper.toEntity(orderPosition)));
   }
 
   @Override
@@ -96,6 +98,16 @@ public class OrderPositionServiceImpl implements OrderPositionService {
   public void deleteAllByActionId(Long actionId) {
     orderPositionRepository
         .findAllByActionId(actionId)
+        .stream()
+        .map(OrderPosition::getId)
+        .forEach(this::deleteById);
+  }
+
+  @Override
+  public void deleteAllByOrderId(Long orderId) {
+    orderPositionRepository
+        .findAllByOrderId(orderId,
+            Pageable.unpaged())
         .stream()
         .map(OrderPosition::getId)
         .forEach(this::deleteById);
