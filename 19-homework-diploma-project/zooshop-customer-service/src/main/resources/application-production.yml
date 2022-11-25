@@ -1,0 +1,15 @@
+spring:
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+  datasource:
+    url: jdbc:h2:mem:customers
+    username: sa
+    password: sa
+  liquibase:
+    change-log: /db/db.changelog-master.xml
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate

@@ -72,6 +72,14 @@ public class RouteConfig {
                     .rewritePath("/api/orders/([\\w]*)",
                         "/$1"))
                 .uri("lb://zooshop-order-service"))
+        .route("zooshop-customers-service-route",
+            r -> r
+                .path("/api/customers/**")
+                .filters(g -> g
+                    .filter(loggingFilterFactory.apply(new LoggingFilterFactoryConfig()))
+                    .rewritePath("/api/customers/([\\w]*)",
+                        "/$1"))
+                .uri("lb://zooshop-customer-service"))
         .build();
   }
 

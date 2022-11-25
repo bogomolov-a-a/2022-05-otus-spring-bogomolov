@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.otus.group202205.homework.spring19.zooshop.address.dao.AddressRepository;
 import ru.otus.group202205.homework.spring19.zooshop.address.dto.AddressDto;
+import ru.otus.group202205.homework.spring19.zooshop.address.feign.CustomerService;
 import ru.otus.group202205.homework.spring19.zooshop.address.feign.OrderService;
 import ru.otus.group202205.homework.spring19.zooshop.address.feign.ProducerService;
 import ru.otus.group202205.homework.spring19.zooshop.address.mapper.AddressMapper;
@@ -22,6 +23,7 @@ public class AddressServiceImpl implements AddressService {
   private final AddressMapper addressMapper;
   private final ProducerService producerService;
   private final OrderService orderService;
+  private final CustomerService customerService;
 
   @Override
   public List<AddressDto> findAll(Pageable pageable, Sort sort) {
@@ -65,6 +67,7 @@ public class AddressServiceImpl implements AddressService {
   public void deleteById(Long id) {
     producerService.deleteAllByAddress(id);
     orderService.deleteAllByAddress(id);
+    customerService.deleteAllByAddress(id);
     addressRepository.deleteById(id);
   }
 
