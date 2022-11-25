@@ -1,7 +1,0 @@
-version: 3.0
-networks:
-  - zooshop-network:
-
-services:
-  - zooshop-good-service:
-      container_name: zooshop-good-service
