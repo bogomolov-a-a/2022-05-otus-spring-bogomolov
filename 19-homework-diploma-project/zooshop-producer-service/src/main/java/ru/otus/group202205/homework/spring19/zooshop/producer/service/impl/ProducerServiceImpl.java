@@ -21,7 +21,7 @@ public class ProducerServiceImpl implements ProducerService {
 
   private final ProducerRepository producerRepository;
   private final ProducerMapper producerMapper;
-  private final GoodService producerServiceFeignProxy;
+  private final GoodService goodService;
   private final AddressService addressService;
 
   @Override
@@ -77,7 +77,7 @@ public class ProducerServiceImpl implements ProducerService {
 
   @Override
   public void deleteById(Long id) {
-    producerServiceFeignProxy.deleteAllByProducer(id);
+    goodService.deleteAllByProducer(id);
     producerRepository.deleteById(id);
   }
 
@@ -90,11 +90,12 @@ public class ProducerServiceImpl implements ProducerService {
 
   @Override
   public void deleteAllByAddressId(Long addressId) {
-    List<Producer> producers = producerRepository
+    producerRepository
         .findAllByAddressId(addressId,
             Pageable.unpaged())
-        .getContent();
-    producerRepository.deleteAll(producers);
+        .stream()
+        .map(Producer::getId)
+        .forEach(this::deleteById);
   }
 
   @Override
