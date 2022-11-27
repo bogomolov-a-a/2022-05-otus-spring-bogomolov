@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: zooshop-service-gateway
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8100/eureka}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    logfile:
+      enabled: true
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
+    env:
+      enabled: true
+server:
+  forward-headers-strategy: FRAMEWORK
+  port: 8200
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  level:
+    ru.otus.group202205.homework.spring19: DEBUG

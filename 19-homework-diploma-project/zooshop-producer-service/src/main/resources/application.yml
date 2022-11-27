@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: zooshop-producer-service
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8100/eureka}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    logfile:
+      enabled: true
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      show-details: ALWAYS
+      show-components: ALWAYS
+    info:
+      enabled: true
+    env:
+      enabled: true
+
+server:
+  forward-headers-strategy: framework
+  port: 8103
+springdoc:
+  swagger-ui:
+    operations-sorter: ALPHA
+    display-operation-id: true
+    path: /swagger-ui/
+    url: /swagger-ui/swagger-ui/openapi-docs/swagger-config
+    disable-swagger-default-url: true
+    query-config-enabled: true
+  api-docs:
+    resolve-schema-properties: true
+    version: OPENAPI_3_0
+    path: /swagger-ui/swagger-ui/openapi-docs/swagger-config
+
